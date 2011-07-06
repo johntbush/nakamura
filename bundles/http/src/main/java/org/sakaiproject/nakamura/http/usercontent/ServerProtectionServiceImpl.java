@@ -521,8 +521,12 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
 
     String requestHost = hrequest.getScheme() + "://" + hrequest.getServerName() + ":"
           + hrequest.getServerPort();
-    // safe hosts are defiend as hosts from which we we can accept non get operations
-    return safeHosts.contains(requestHost);
+    // safe hosts are defined as hosts from which we we can accept non get operations
+    boolean safe = safeHosts.contains(requestHost);
+    if ( !safe ) {
+      LOGGER.debug("Host {} is not listed in set of safe hosts {} ", requestHost, safeHosts);
+    }
+    return safe;
   }
 
   public void bindServerProtectionValidator(ServiceReference serviceReference) {
