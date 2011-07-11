@@ -41,20 +41,9 @@
                 <version>9.0-801.jdbc4-1.0-SNAPSHOT</version>
                   <startLevel>1</startLevel> 
             </bundle>
-            <bundle>
-              <groupId>uk.ac.cam.caret.oae</groupId>
-              <artifactId>org.sakaiproject.nakamura.solr</artifactId>
-              <version>1.0-SNAPSHOT</version>
-              <startLevel>15</startLevel> 
-            </bundle>
           </additionalBundles>
           <bundleExclusions>
           <!-- You can exclude particular bundles here. -->
-            <bundle>
-              <groupId>org.sakaiproject.nakamura</groupId>
-              <artifactId>org.sakaiproject.nakamura.solr</artifactId>
-              <version>0.11-SNAPSHOT</version>
-            </bundle>
           </bundleExclusions>
           <!-- Needs to be copied from nakamura.app -->
           <jarWebSupport>
