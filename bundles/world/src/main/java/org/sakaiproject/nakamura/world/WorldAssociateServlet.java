@@ -157,7 +157,7 @@ public class WorldAssociateServlet extends SlingAllMethodsServlet {
       jsonImporter.importContent(contentManager, jsonAssociate, worldContent.getPath(),
           true, true, false, accessControlManager);
 
-      response.sendError(HttpServletResponse.SC_OK);
+      response.setStatus(HttpServletResponse.SC_OK);
       response.setContentType("application/json");
       response.setCharacterEncoding("UTF-8");
       Map<String, Object> responseMap = ImmutableMap.of("world",
