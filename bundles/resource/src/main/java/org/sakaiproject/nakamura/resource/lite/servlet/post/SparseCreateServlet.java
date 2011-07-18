@@ -105,7 +105,7 @@ public class SparseCreateServlet extends SlingAllMethodsServlet implements Optin
           // parent path "/~somebody/private" but then be resolved to "a:somebody/private".
           Content nearestContent = nearestResource.adaptTo(Content.class);
           String contentTargetPath = nearestContent.getPath() + childPath;
-          LOGGER.info("Going to create Resource {} with Content {} starting from Resource {} with child path {}",
+          LOGGER.debug("Going to create Resource {} with Content {} starting from Resource {} with child path {}",
               new Object[] {resource.getPath(), contentTargetPath, nearestResource.getPath(), childPath});
           request.setAttribute(CONTENT_TARGET_PATH_ATTRIBUTE, contentTargetPath);
           return true;
