@@ -95,7 +95,7 @@ public class ConnectionIndexingHandler implements IndexingHandler {
       Event event) {
     String path = (String) event.getProperty(FIELD_PATH);
 
-    logger.info("Indexing connections at path {}", path);
+    logger.debug("Indexing connections at path {}", path);
     List<SolrInputDocument> documents = Lists.newArrayList();
     if (!StringUtils.isBlank(path)) {
       try {
