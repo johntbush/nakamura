@@ -304,10 +304,10 @@ public class SolrSearchServlet extends SlingSafeMethodsServlet {
 
         Iterator<Result> iterator = rs.getResultSetIterator();
         if (useBatch) {
-          LOGGER.info("Using batch processor for results");
+          LOGGER.debug("Using batch processor for results");
           searchBatchProcessor.writeResults(request, write, iterator);
         } else {
-          LOGGER.info("Using regular processor for results");
+          LOGGER.debug("Using regular processor for results");
           // We don't skip any rows ourselves here.
           // We expect a rowIterator coming from a resultset to be at the right place.
           for (long i = 0; i < nitems && iterator.hasNext(); i++) {

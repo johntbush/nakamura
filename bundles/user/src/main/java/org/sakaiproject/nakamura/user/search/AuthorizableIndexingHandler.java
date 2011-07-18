@@ -158,7 +158,7 @@ public class AuthorizableIndexingHandler implements IndexingHandler {
         if (doc != null) {
           documents.add(doc);
 
-          logger.info("{} authorizable for searching: {}", topic, authName);
+          logger.debug("{} authorizable for searching: {}", topic, authName);
         }
       }
     }

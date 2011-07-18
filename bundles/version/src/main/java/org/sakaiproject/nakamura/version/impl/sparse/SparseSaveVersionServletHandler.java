@@ -74,7 +74,7 @@ public class SparseSaveVersionServletHandler extends AbstractAllMethodsServletRe
       
       String versionId  = contentManager.saveVersion(content.getPath());
       Content savedVersion = contentManager.getVersion(content.getPath(), versionId);
-      LOGGER.info("Saved Version as {} got as {} ", versionId, savedVersion);
+      LOGGER.debug("Saved Version as {} got as {} ", versionId, savedVersion);
 
       response.setContentType("application/json");
       response.setCharacterEncoding("UTF-8");
@@ -87,11 +87,11 @@ public class SparseSaveVersionServletHandler extends AbstractAllMethodsServletRe
       ExtendedJSONWriter.writeNodeContentsToWriter(write, savedVersion);
       write.endObject();
     } catch (JSONException e) {
-      LOGGER.info("Failed to save version ",e);
+      LOGGER.warn("Failed to save version ",e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
       return;
     } catch (StorageClientException e) {
-      LOGGER.info("Failed to save version ",e);
+      LOGGER.warn("Failed to save version ",e);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
       return;
     } catch (AccessDeniedException e) {
@@ -102,7 +102,7 @@ public class SparseSaveVersionServletHandler extends AbstractAllMethodsServletRe
   }
 
   public boolean accepts(SlingHttpServletRequest request) {
-    LOGGER.info("Checing accepts ");
+    LOGGER.debug("Checking accepts ");
     return (request.getResource() instanceof SparseContentResource);
   }
 
