@@ -111,14 +111,14 @@ public class ChatServlet extends SlingSafeMethodsServlet {
         } catch (NumberFormatException e) {
           hasUpdate = true;
           LOGGER
-              .info("User requested non-Long timestamp: {}", timestampParam.getString());
+              .warn("User requested non-Long timestamp: {}", timestampParam.getString());
         }
       } else {
         hasUpdate = true;
       }
     }
 
-    LOGGER.info("Returned time = {}, update = {}", time, hasUpdate);
+    LOGGER.debug("Returned time = {}, update = {}", time, hasUpdate);
 
     Calendar cal = Calendar.getInstance();
     cal.setTimeInMillis(time);
