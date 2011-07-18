@@ -198,7 +198,7 @@ public class SparsePostServlet extends SlingAllMethodsServlet {
         processors = this.cachedPostProcessors;
       }
       try {
-        log.info("Performing operation {} ",operation);
+        log.debug("Performing operation {} ",operation);
         operation.run(request, htmlResponse, processors);
       } catch (ResourceNotFoundException rnfe) {
         htmlResponse.setStatus(HttpServletResponse.SC_NOT_FOUND, rnfe.getMessage());
