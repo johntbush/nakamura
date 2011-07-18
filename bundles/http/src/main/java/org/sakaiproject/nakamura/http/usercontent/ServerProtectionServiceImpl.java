@@ -324,6 +324,7 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
           for (String safePath : safeToStreamPaths) {
             if (path.startsWith(safePath)) {
               safeToStream = true;
+              LOGGER.debug("Safe To stream becuase starts with {} ",safePath);
               break;
             }
           }
@@ -336,6 +337,7 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
                 // KERN-1930 and list discussion.
                 // Also trust a "GET" of non-existing content so that the 404 comes from
                 // the right port (KERN-2001)
+                LOGGER.debug("Node not null  or non existing {} {} ",node, resource.getResourceType());
                 return true;
               }
               String resourcePath = resource.getPath();
@@ -350,6 +352,8 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
                 }
               }
             }
+          } else {
+              LOGGER.debug("Content was safe to stream ");
           }
         }
       } else {
