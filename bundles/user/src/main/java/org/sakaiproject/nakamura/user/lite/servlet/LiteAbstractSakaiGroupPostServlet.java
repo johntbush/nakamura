@@ -104,7 +104,7 @@ public abstract class LiteAbstractSakaiGroupPostServlet extends
       String[] membersToDelete = request.getParameterValues(paramName + SlingPostConstants.SUFFIX_DELETE);
       if (membersToDelete != null) {
         toSave.put(group.getId(), group);
-        LOGGER.info("Members to delete {} ",membersToDelete);
+        LOGGER.debug("Members to delete {} ",membersToDelete);
         for (String member : membersToDelete) {
           String memberId = getAuthIdFromParameter(member);
           group.removeMember(memberId);
@@ -126,7 +126,7 @@ public abstract class LiteAbstractSakaiGroupPostServlet extends
       // second add any members posted as ":member"
       String[] membersToAdd = request.getParameterValues(paramName);
       if (membersToAdd != null) {
-        LOGGER.info("Members to add {} ",membersToAdd);
+        LOGGER.debug("Members to add {} ",membersToAdd);
         Group peerGroup = getPeerGroupOf(group, authorizableManager, toSave);
         List<Authorizable> membersToRemoveFromPeer = new ArrayList<Authorizable>();
         for (String member : membersToAdd) {
@@ -154,18 +154,18 @@ public abstract class LiteAbstractSakaiGroupPostServlet extends
                   ungetSession(adminSession);
               }
             }else{
-              LOGGER.info("Group {} is not Joinable: User {} adding {}  ",new Object[]{group.getId(), session.getUserId(), memberAuthorizable.getId(),});
+              LOGGER.debug("Group {} is not Joinable: User {} adding {}  ",new Object[]{group.getId(), session.getUserId(), memberAuthorizable.getId(),});
               //group is restricted, so use the current user's authorization
               //to add the member to the group:
 
               group.addMember(memberAuthorizable.getId());
-              if ( LOGGER.isInfoEnabled() ) {
-                LOGGER.info("{} Membership now {} {} {}", new Object[]{ group.getId(),Arrays.toString(group.getMembers()), Arrays.toString(group.getMembersAdded()), Arrays.toString(group.getMembersRemoved())});
+              if ( LOGGER.isDebugEnabled() ) {
+                LOGGER.debug("{} Membership now {} {} {}", new Object[]{ group.getId(),Arrays.toString(group.getMembers()), Arrays.toString(group.getMembersAdded()), Arrays.toString(group.getMembersRemoved())});
               }
               toSave.put(group.getId(), group);
               Group gt = (Group) toSave.get(group.getId());
-              if ( LOGGER.isInfoEnabled() ) {
-                LOGGER.info("{} Membership now {} {} {}", new Object[]{ group.getId(),Arrays.toString(gt.getMembers()), Arrays.toString(gt.getMembersAdded()), Arrays.toString(gt.getMembersRemoved())});
+              if ( LOGGER.isDebugEnabled() ) {
+                LOGGER.debug("{} Membership now {} {} {}", new Object[]{ group.getId(),Arrays.toString(gt.getMembers()), Arrays.toString(gt.getMembersAdded()), Arrays.toString(gt.getMembersRemoved())});
               }
               changed = true;
             }
@@ -181,14 +181,14 @@ public abstract class LiteAbstractSakaiGroupPostServlet extends
         }
         if ((peerGroup != null) && (membersToRemoveFromPeer.size() > 0)) {
           for (Authorizable member : membersToRemoveFromPeer) {
-            if ( LOGGER.isInfoEnabled() ) {
-              LOGGER.info("Removing Member {} from {} ",member.getId(), peerGroup.getId());
+            if ( LOGGER.isDebugEnabled() ) {
+              LOGGER.debug("Removing Member {} from {} ",member.getId(), peerGroup.getId());
             }
             peerGroup.removeMember(member.getId());
           }
           toSave.put(peerGroup.getId(), peerGroup);
-          if ( LOGGER.isInfoEnabled() ) {
-            LOGGER.info("{} Just Updated Peer Group Membership now {} {} {}", new Object[]{peerGroup.getId(), Arrays.toString(peerGroup.getMembers()), Arrays.toString(peerGroup.getMembersAdded()), Arrays.toString(peerGroup.getMembersRemoved())});
+          if ( LOGGER.isDebugEnabled() ) {
+            LOGGER.debug("{} Just Updated Peer Group Membership now {} {} {}", new Object[]{peerGroup.getId(), Arrays.toString(peerGroup.getMembers()), Arrays.toString(peerGroup.getMembersAdded()), Arrays.toString(peerGroup.getMembersRemoved())});
           }
         }
 
@@ -408,15 +408,15 @@ public abstract class LiteAbstractSakaiGroupPostServlet extends
       if (authorizable instanceof Group && authorizable.hasProperty(UserConstants.PROP_JOINABLE_GROUP)) {
         try {
           String joinable = (String) authorizable.getProperty(UserConstants.PROP_JOINABLE_GROUP);
-          LOGGER.info("Joinable Property on {} {} ", authorizable, joinable);
+          LOGGER.debug("Joinable Property on {} {} ", authorizable, joinable);
           if (joinable != null) {
             return Joinable.valueOf(joinable);
           }
         } catch (IllegalArgumentException e) {
-          LOGGER.info(e.getMessage(),e);
+          LOGGER.warn(e.getMessage(),e);
         }
       } else {
-        LOGGER.info("No Joinable Property on {} ", authorizable);
+        LOGGER.debug("No Joinable Property on {} ", authorizable);
       }
     return Joinable.no;
   }
