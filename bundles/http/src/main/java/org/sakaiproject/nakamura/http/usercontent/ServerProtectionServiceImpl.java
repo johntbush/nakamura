@@ -414,7 +414,8 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
           Mac m = Mac.getInstance(HMAC_SHA512);
           m.init(transferKeys[keyIndex]);
 
-          String message = finalUrl + ";" + userId + ";" + ts;
+          String message = createMessage(finalUrl, userId, String.valueOf(ts));
+          
           m.update(message.getBytes("UTF-8"));
           String hmac = Base64.encodeBase64URLSafeString(m.doFinal());
           hmac = Base64.encodeBase64URLSafeString((hmac + ";" + userId + ";" + ts)
@@ -423,13 +424,27 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
           if ( finalUrl.indexOf('?') >  0) {
             spacer = "&";
           }
-          return finalUrl + spacer + HMAC_PARAM + "=" + hmac;
+          String transferUrl =  finalUrl + spacer + HMAC_PARAM + "=" + hmac;
+          LOGGER.debug("Message was [{}] ", message);
+          LOGGER.debug("Key was [{}] [{}] ", keyIndex, transferKeys[keyIndex]);
+          LOGGER.debug("Transfer URL created as [{}] ",transferUrl);
+          return transferUrl;
         } catch (Exception e) {
           LOGGER.warn(e.getMessage(), e);
         }
       }
     }
     return finalUrl;
+  }
+
+  private String createMessage(String url, String userId, String ts ) {
+    // strip the protocol since it wont survive front end proxies
+    if ( url.startsWith("http:") ) {
+       url = url.substring(5);
+    } else if ( url.startsWith("https:") ) {
+       url = url.substring(6);
+    }
+    return url + ";" + userId + ";" + ts;
   }
 
   public String getTransferUserId(HttpServletRequest request) {
@@ -457,7 +472,7 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
           String requestHmac = parts[0];
           String requestUserId = parts[1];
           String requestTs = parts[2];
-          String message = finalUrl + ";" + requestUserId + ";" + requestTs;
+          String message = createMessage(finalUrl, requestUserId, requestTs);
           long requestTsL = Long.parseLong(requestTs);
           if (Math.abs(System.currentTimeMillis() - requestTsL) < 60000L) {
             int keyIndex = (int) (requestTsL - ((requestTsL / 10) * 10));
@@ -467,7 +482,13 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
             String testHmac = Base64.encodeBase64URLSafeString(m.doFinal());
             if (testHmac.equals(requestHmac)) {
               return requestUserId;
+            } else {
+              LOGGER.debug("Message was [{}] ", message);
+              LOGGER.debug("Key was [{}] [{}] ", keyIndex, transferKeys[keyIndex]);
+              LOGGER.debug("Hmac did not validate testHmac was [{}], requestHmac [{}] ", testHmac, requestHmac); 
             }
+          } else {
+            LOGGER.debug("Hmac has expired, older than 60s, hmac message was {} ", message);
           }
         } catch (Exception e) {
           LOGGER.warn(e.getMessage());
