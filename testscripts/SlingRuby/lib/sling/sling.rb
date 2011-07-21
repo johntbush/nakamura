@@ -279,13 +279,7 @@ module SlingInterface
             url = URI.parse(res.header['location'])
             @log.info("Redirecting to #{url}")
             req = Net::HTTP::Get.new(url.request_uri())
-            # Cookie-based authn should have happened before the redirect.
-            if (!@trustedauth )
-              @user.do_request_auth(req)
-            end
-            set_cookies(req)
-            res = createHttp(url).start { |http| http.request(req) }
-            save_cookies(res)
+            res = createHttp(url).start {|http|  http.request(req) } 
         end
         return res
     end
