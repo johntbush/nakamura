@@ -481,6 +481,7 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
             m.update(message.getBytes("UTF-8"));
             String testHmac = Base64.encodeBase64URLSafeString(m.doFinal());
             if (testHmac.equals(requestHmac)) {
+              LOGGER.debug("Successfully extracted requestUserId {} from HMAC", requestUserId);
               return requestUserId;
             } else {
               LOGGER.debug("Message was [{}] ", message);
