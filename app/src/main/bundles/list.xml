@@ -433,6 +433,11 @@ KERN-1187
     </bundle>
     <bundle>
       <groupId>org.sakaiproject.nakamura</groupId>
+      <artifactId>org.sakaiproject.nakamura.commons.commons-httpclient</artifactId>
+      <version>3.1-0.11-SNAPSHOT</version>
+    </bundle>
+    <bundle>
+      <groupId>org.sakaiproject.nakamura</groupId>
       <artifactId>org.sakaiproject.nakamura.lom</artifactId>
       <version>0.11-SNAPSHOT</version>
     </bundle>
