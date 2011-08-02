@@ -141,7 +141,7 @@ public class LiteCountServlet extends SlingSafeMethodsServlet {
         }
       }
 
-      queryString.append(")&start=0&sort=_created desc");
+      queryString.append(")&start=0&sort=_created&items=100000 desc");
 
       Query query = new Query(queryString.toString());
       LOGGER.info("Submitting Query {} ", query);
