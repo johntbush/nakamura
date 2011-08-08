@@ -149,7 +149,9 @@ public class LiteInternalMessageHandler implements LiteMessageTransport,
       Authorizable au = authManager.findAuthorizable(recipient);
       if (au != null && au instanceof Group) {
         Group group = (Group) au;
-        recipients.add(recipient); // prevent infinite recursion in cyclic group references
+        if ( !recipients.contains(recipient) ) {
+           recipients.add(recipient); // prevent infinite recursion in cyclic group references
+        }
         // user must be in the group directly to send a message:
         for (String memberName : group.getMembers()) {
           if (!recipients.contains(memberName)) {
