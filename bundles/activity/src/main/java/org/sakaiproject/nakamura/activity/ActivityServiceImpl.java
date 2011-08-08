@@ -71,6 +71,9 @@ public class ActivityServiceImpl implements ActivityService {
     }
     // create activity within activityStore
     String activityPath = StorageClientUtils.newPath(path, ActivityUtils.createId());
+
+
+    // FIXME: this looks wrong. there should not be a feed in the target of the activity, may need to JIRA. (ask ieb)
     String activityFeedPath = StorageClientUtils.newPath(targetLocation.getPath(), "activityFeed");
 
     if (!contentManager.exists(activityFeedPath)) {
