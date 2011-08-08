@@ -49,6 +49,12 @@
             </bundle>
           </additionalBundles>
           <bundleExclusions>
+             <bundle>
+              <groupId>org.sakaiproject.nakamura</groupId>
+              <artifactId>org.sakaiproject.nakamura.uxloader</artifactId>
+              <version>0.7-SNAPSHOT</version>
+              <startLevel>25</startLevel> 
+             </bundle>
           <!-- You can exclude particular bundles here. -->
           </bundleExclusions>
           <!-- Needs to be copied from nakamura.app -->
