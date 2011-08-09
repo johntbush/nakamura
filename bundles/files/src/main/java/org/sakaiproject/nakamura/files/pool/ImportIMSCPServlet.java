@@ -5,7 +5,7 @@ import static org.sakaiproject.nakamura.api.files.FilesConstants.POOLED_CONTENT_
 import static org.sakaiproject.nakamura.api.files.FilesConstants.POOLED_CONTENT_FILENAME;
 import static org.sakaiproject.nakamura.api.files.FilesConstants.POOLED_CONTENT_RT;
 import static org.sakaiproject.nakamura.api.files.FilesConstants.POOLED_CONTENT_USER_MANAGER;
-import static org.sakaiproject.nakamura.api.files.FilesConstants.POOLED_CONTENT_CUSTOM_MIMETYPE;
+import static org.sakaiproject.nakamura.api.files.FilesConstants.POOLED_CONTENT_MIMETYPE;
 import static org.sakaiproject.nakamura.api.files.FilesConstants.SAKAI_DESCRIPTION;
 import static org.sakaiproject.nakamura.api.files.FilesConstants.SAKAI_TAGS;
 
@@ -220,7 +220,7 @@ public class ImportIMSCPServlet extends SlingAllMethodsServlet {
     contentProperties.put(SLING_RESOURCE_TYPE_PROPERTY, POOLED_CONTENT_RT);
     contentProperties.put(POOLED_CONTENT_CREATED_FOR, au.getId());
     contentProperties.put(POOLED_CONTENT_USER_MANAGER, new String[]{au.getId()});
-    contentProperties.put(POOLED_CONTENT_CUSTOM_MIMETYPE, "x-sakai/document");
+    contentProperties.put(POOLED_CONTENT_MIMETYPE, "x-sakai/document");
     Content content = new Content(poolId,contentProperties);
     contentManager.update(content);
     content = contentManager.get(poolId);
