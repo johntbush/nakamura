@@ -1,17 +1,23 @@
 package org.sakaiproject.nakamura.files;
 
-import com.google.common.collect.ImmutableMap;
 
 import static org.sakaiproject.nakamura.api.files.FilesConstants.POOLED_CONTENT_FILENAME;
 import static org.sakaiproject.nakamura.api.files.FilesConstants.SAKAI_DESCRIPTION;
 import static org.sakaiproject.nakamura.api.files.FilesConstants.SAKAI_TAGS;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+
+import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.Modified;
+import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
+import org.apache.sling.commons.osgi.OsgiUtil;
 import org.sakaiproject.nakamura.api.files.FileUploadHandler;
 import org.sakaiproject.nakamura.api.lite.Repository;
 import org.sakaiproject.nakamura.api.lite.Session;
@@ -59,8 +65,21 @@ public class IMSCPFileHandler implements FileUploadHandler {
   
   private static final Logger LOGGER = LoggerFactory
       .getLogger(IMSCPFileHandler.class);
+
+  private static final String[] DEFAULT_ZIP_TYPES = {"application/zip", "application/x-zip", "application/x-zip-compressed", "application/x-compress", "application/x-compressed" };
+
+  @Property( value = {"application/zip", "application/x-zip-compressed" } )
+  private static final String ZIP_TYPES_PROP = "zip-types";
+
+  private Set<String> zipTypes = ImmutableSet.of(DEFAULT_ZIP_TYPES);
   
   private MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+
+  @Activate
+  @Modified
+  public void activate(Map<String, Object> properties ) {
+      zipTypes = ImmutableSet.of(OsgiUtil.toStringArray(properties.get(ZIP_TYPES_PROP), DEFAULT_ZIP_TYPES)); 
+  }
   
   public void handleFile(Map<String, Object> results, String poolId,
       InputStream fileInputStream, String userId, boolean isNew) throws IOException {
@@ -68,10 +87,13 @@ public class IMSCPFileHandler implements FileUploadHandler {
       Session adminSession = sparseRepository.loginAdministrative();
       ContentManager contentManager = adminSession.getContentManager();
       String type = (String)contentManager.get(poolId).getProperty(Content.MIMETYPE_FIELD);
-      if (!"application/zip".equals(type))
+      if (!zipTypes.contains(type)) {
+        LOGGER.debug("PoolID {} has wrong mimetype, {} ignoring ",poolId, type);
         return;
+      }
       String name = (String)contentManager.get(poolId).getProperty(POOLED_CONTENT_FILENAME);
       Content content = createCourse(poolId, adminSession, fileInputStream, name, userId);
+      LOGGER.debug("Created IMS_CP {} ",content);
       results.put(name, ImmutableMap.of("poolId", (Object)poolId, "item", content.getProperties(), "type", "imscp"));
     } catch (StorageClientException e) {
       LOGGER.warn(e.getMessage(), e);
@@ -114,6 +136,7 @@ public class IMSCPFileHandler implements FileUploadHandler {
         xmlContent = xmlContent.substring(0, xmlContent.lastIndexOf('>') + 1);
         manifest = new Manifest(xmlContent);
         manifestFlag = true;
+        LOGGER.debug(" Saving Manifest file {} ",baseDir+"/"+filename);
         contentManager.writeBody(baseDir + "/" + filename, new ByteArrayInputStream(builder.toString().getBytes()));
         continue;
       }
@@ -128,9 +151,11 @@ public class IMSCPFileHandler implements FileUploadHandler {
           builder.append(chars, 0, length);
         }
         fileContent.put(entry.getName(), builder.toString());
+        LOGGER.debug(" Saving Text file {} ",baseDir+"/"+entry.getName());
         contentManager.writeBody(baseDir + "/" + entry.getName(), new ByteArrayInputStream(builder.toString().getBytes()));
         continue;
       }
+      LOGGER.debug(" Saving file {} ",baseDir+"/"+entry.getName());
       contentManager.writeBody(baseDir + "/" + entry.getName(), getInputStream(zin));
     }
     zin.closeEntry();
@@ -156,15 +181,15 @@ public class IMSCPFileHandler implements FileUploadHandler {
     }      
     
     Content content = contentManager.get(poolId);
-    content.setProperty("sakai:custom-mimetype", "x-sakai/document");
+    content.setProperty(Content.MIMETYPE_FIELD, "x-sakai/document");
     content.setProperty("zipname", name);
+    LOGGER.debug("Creating Sakai DOC from IMS-CP at {} ",poolId);
     JSONObject pageSetJSON = manifestToPageSet(manifest, poolId, fileContent);
     Iterator<String> keys = pageSetJSON.keys();
     while (keys.hasNext()) {
       String key = keys.next();
       content.setProperty(key, pageSetJSON.optString(key));
     }
-    content.removeProperty(Content.MIMETYPE_FIELD);
     contentManager.update(content);
 
     return contentManager.get(poolId);
