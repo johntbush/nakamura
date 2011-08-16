@@ -105,6 +105,7 @@ import java.util.List;
             "Example<br><pre>curl -FoldPwd=oldpassword -FnewPwd=newpassword =FnewPwdConfirm=newpassword " +
             "http://localhost:8080/system/userManager/user/username.changePassword.html</pre>"},
         parameters={
+        @ServiceParameter(name="disablePwd", description="if 'disable', disables the Password completely, only admin can do this"),
         @ServiceParameter(name="oldPwd", description="current password for user (required)"),
         @ServiceParameter(name="newPwd", description="new password for user (required)"),
         @ServiceParameter(name="newPwdConfirm", description="confirm new password for user (required)")
@@ -149,6 +150,15 @@ public class LiteChangeSakaiUserPasswordServlet extends LiteAbstractUserPostServ
         if (session == null) {
             throw new StorageClientException("Sparse Session not found");
         }
+        AuthorizableManager authorizableManager = session.getAuthorizableManager();
+        User currentUser = authorizableManager.getUser();
+        if ( currentUser.isAdmin() &&
+              "disable".equals(request.getParameter("disablePwd")))  {
+           authorizableManager.disablePassword(authorizable);
+           changes.add(Modification.onModified(resource.getPath()+"/disabled-password"));
+           return;
+        }
+        
 
         // check that the submitted parameter values have valid values.
         String oldPwd = request.getParameter("oldPwd");
@@ -166,7 +176,6 @@ public class LiteChangeSakaiUserPasswordServlet extends LiteAbstractUserPostServ
         }
 
 
-          AuthorizableManager authorizableManager = session.getAuthorizableManager();
           authorizableManager.changePassword(authorizable, digestPassword(newPwd), digestPassword(oldPwd));
             changes.add(Modification.onModified(resource.getPath()
                 + "/password"));
