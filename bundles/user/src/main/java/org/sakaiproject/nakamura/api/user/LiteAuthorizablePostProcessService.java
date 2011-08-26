@@ -7,7 +7,13 @@ import org.sakaiproject.nakamura.api.lite.authorizable.Authorizable;
 
 public interface LiteAuthorizablePostProcessService {
 
-  void process(Authorizable user, Session selfRegSession, ModificationType create,
-      SlingHttpServletRequest request) throws Exception;
+	void process(Authorizable user, Session selfRegSession,
+			ModificationType create, SlingHttpServletRequest request)
+			throws Exception;
+
+	void addAuthorizablePostProcessor(LiteAuthorizablePostProcessor service,
+			int order);
+
+	void removeAuthorizablePostProcessor(LiteAuthorizablePostProcessor service);
 
 }
