@@ -19,6 +19,9 @@ package org.sakaiproject.nakamura.user.lite.servlet;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
+import org.apache.felix.scr.annotations.ReferenceCardinality;
+import org.apache.felix.scr.annotations.ReferencePolicy;
+import org.apache.felix.scr.annotations.ReferenceStrategy;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestParameter;
@@ -49,6 +52,13 @@ import java.util.Map;
 
 @Component(immediate=true, metatype=true)
 @Service(value=LiteAuthorizablePostProcessService.class)
+@Reference(name="authorizablePostProcessor", 
+		cardinality=ReferenceCardinality.OPTIONAL_MULTIPLE, 
+		policy=ReferencePolicy.DYNAMIC, 
+		strategy=ReferenceStrategy.EVENT, 
+		referenceInterface=LiteAuthorizablePostProcessor.class,
+		bind="bindAuthorizablePostProcessor",
+		unbind="unbindAuthorizablePostProcessor")
 public class LiteAuthorizablePostProcessServiceImpl extends AbstractOrderedService<LiteAuthorizablePostProcessor> implements LiteAuthorizablePostProcessService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LiteAuthorizablePostProcessServiceImpl.class);
