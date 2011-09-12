@@ -4,54 +4,21 @@
     <parent>
       <groupId>org.sakaiproject.nakamura</groupId>
       <artifactId>base</artifactId>
-      <version>1.0.0</version>
+      <version>0.11-SNAPSHOT</version>
     </parent>
     <groupId>org.sakaiproject.nakamura</groupId>
-    <artifactId>org.sakaiproject.nakamura.ojdbc</artifactId>
-    <version>1.0.0</version>
+    <artifactId>org.sakaiproject.nakamura.ojdbc6</artifactId>
+    <version>0.11-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>Sakai Nakamura :: Oracle JDBC Bundle</name>
     <description>
-        This bundle wraps ojdbc14.jar.
+        This bundle wraps ojdbc6.jar.
     </description>
     <organization>
         <name>The Sakai Foundation</name>
         <url>http://sakaiproject.org/</url>
     </organization>
-    <profiles>
-        <profile>
-            <id>local</id>
-            <activation>
-                <file>
-                    <exists>ojdbc14.jar</exists>
-                </file>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>oracle</groupId>
-                    <artifactId>oracle.jdbc</artifactId>
-                    <version>0.1</version>
-                    <scope>system</scope>
-                    <systemPath>${basedir}/ojdbc14.jar</systemPath>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>repo</id>
-            <activation>
-                <file>
-                    <missing>ojdbc14.jar</missing>
-                </file>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>oracle</groupId>
-                    <artifactId>oracle.jdbc</artifactId>
-                    <version>0.1</version>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -68,6 +35,7 @@
                           oracle.i18n.text.converter;resolution:=optional,
                           oracle.ons;resolution:=optional,
                           oracle.security.pki;resolution:=optional,
+                          !com.sun.security.auth.module,
                           *
                         </Import-Package>
                     </instructions>
@@ -75,4 +43,11 @@
             </plugin>
         </plugins>
     </build>
+            <dependencies>
+                <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>ojdbc6</artifactId>
+                    <version>11.1.0.7</version>
+                </dependency>
+            </dependencies>
 </project>
