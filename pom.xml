@@ -78,6 +78,7 @@
         <module>bundles/templates</module>
         <module>bundles/world</module>
         <module>testscripts</module>
+        <module>contrib/mysql-jdbc</module>
       </modules>
     </profile>
     <profile>
