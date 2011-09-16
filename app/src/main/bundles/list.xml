@@ -655,5 +655,20 @@ KERN-1187
       <artifactId>org.sakaiproject.nakamura.world</artifactId>
       <version>1.0.0</version>
     </bundle>
+    <bundle>
+      <groupId>com.rsmart</groupId>
+      <artifactId>hubspot-rest</artifactId>
+      <version>0.1</version>
+    </bundle>
+    <bundle>
+      <groupId>com.rsmart</groupId>
+      <artifactId>com.rsmart.nakamura.registration</artifactId>
+      <version>0.1</version>
+    </bundle>
+    <bundle>
+      <groupId>com.rsmart</groupId>
+      <artifactId>acceptterms</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </bundle>
    </startLevel>
 </bundles>
