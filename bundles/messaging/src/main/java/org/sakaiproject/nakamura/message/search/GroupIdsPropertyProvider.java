@@ -5,19 +5,17 @@ import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.sakaiproject.nakamura.api.connections.ConnectionManager;
-import org.sakaiproject.nakamura.api.connections.ConnectionState;
 import org.sakaiproject.nakamura.api.lite.Repository;
 import org.sakaiproject.nakamura.api.lite.Session;
-import org.sakaiproject.nakamura.api.lite.StorageClientException;
-import org.sakaiproject.nakamura.api.lite.accesscontrol.AccessDeniedException;
+import org.sakaiproject.nakamura.api.lite.authorizable.Authorizable;
+import org.sakaiproject.nakamura.api.lite.authorizable.AuthorizableManager;
+import org.sakaiproject.nakamura.api.lite.authorizable.Group;
 import org.sakaiproject.nakamura.api.search.SearchConstants;
 import org.sakaiproject.nakamura.api.search.solr.SolrSearchPropertyProvider;
-import org.sakaiproject.nakamura.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -27,76 +25,84 @@ import java.util.Map;
  */
 @Component
 @Service
-@Property(name = SearchConstants.REG_PROVIDER_NAMES, value = "ContactIdsPropertyProvider")
-public class ContactIdsPropertyProvider
+@Property(name = SearchConstants.REG_PROVIDER_NAMES, value = "GroupIdsPropertyProvider")
+public class GroupIdsPropertyProvider
     implements SolrSearchPropertyProvider
 {
     private static final Logger
-        LOG                                 = LoggerFactory.getLogger(ContactIdsPropertyProvider.class);
+        LOG                                 = LoggerFactory.getLogger(GroupIdsPropertyProvider.class);
 
     @Reference
     protected transient Repository
         repository                          = null;
 
-    @Reference
-    protected transient ConnectionManager
-        connectionManager                   = null;
-
     public static final String
-        CONTACT_IDS                         = "_knownUserIds";
+        GROUP_IDS                           = "_knownGroupIds";
     
     public void loadUserProperties(SlingHttpServletRequest request,
                                    Map<String, String> propertiesMap)
     {
-        LOG.debug ("expanding user contact IDs");
+        LOG.debug ("expanding user Group IDs");
         
         final String
             userId = propertiesMap.get("_userId");
         Session
             session = null;
+        AuthorizableManager
+            authorizableManager = null;
+        Authorizable
+            user = null;
 
         if (userId == null)
         {
-            LOG.error ("userId not supplied to expand connection Ids");
+            LOG.error ("userId not supplied to expand group Ids");
             return;
         }
 
         try
         {
             session = repository.loginAdministrative();
+            authorizableManager = session.getAuthorizableManager();
+
+            user = authorizableManager.findAuthorizable(userId);
         }
         catch (Exception e)
         {
-            LOG.error("could not obtain a session to load user " + userId + "'s connections", e);
+            LOG.error ("could not retrieve user object from AuthorizableManger");
             return;
         }
 
-        //get list of user contacts
-        List<String>
-            connectionIds = connectionManager.getConnectedUsers(session, userId, ConnectionState.ACCEPTED);
+        Iterator<Group>
+            groups = user.memberOf(authorizableManager);
 
+        Group
+            group = null;
         StringBuilder
             sb = new StringBuilder();
         String
             delim = "";
 
-        sb.append("AND id:(");
+        sb.append("AND ");
 
-        if (connectionIds == null || connectionIds.size() < 1)
+        if (groups == null || !groups.hasNext())
         {
-            sb.append(userId);
+            LOG.debug("no groups recovered");
+            sb.append("!id:*");
         }
         else
         {
-            for (String connectionId : connectionIds)
+            sb.append("id:(");
+            while (groups.hasNext())
             {
-                sb.append(delim).append(connectionId);
+                group = groups.next();
+                sb.append(delim).append(group.getId());
                 delim = " OR ";
             }
+            sb.append(")");
         }
-        
-        sb.append(")");
 
-        propertiesMap.put(CONTACT_IDS, sb.toString());
+        LOG.debug("group Ids to append to query: [" + sb.toString() + "]");
+
+        propertiesMap.put(GROUP_IDS, sb.toString());
     }
 }

@@ -1,6 +1,6 @@
 {
   "sling:resourceType": "sakai/solr-search",
-  "sakai:query-template": "(((type:g AND resourceType:authorizable) ${_categoryAnd} AND ${_knownGroupIds} (name:(${q}) OR title:(${q}) OR description:(${q}) OR title:(${q}) OR content:(${q}) OR widgetdata:(${q}) OR ngram:(${q}) OR edgengram:(${q})${_taguuids})) OR ((type:u AND resourceType:authorizable) AND ${_knownUserIds} (name:(${q}) OR firstName:(${q}) OR lastName:(${q}) OR email:(${q}) OR title:(${q}) OR content:(${q}) OR widgetdata:(${q}) OR ngram:(${q}) OR edgengram:(${q}) ${_taguuids})))",
+  "sakai:query-template": "(((type:g AND resourceType:authorizable) ${_knownGroupIds} ${_categoryAnd} (name:(${q}) OR title:(${q}) OR description:(${q}) OR title:(${q}) OR content:(${q}) OR widgetdata:(${q}) OR ngram:(${q}) OR edgengram:(${q})${_taguuids})) OR ((type:u AND resourceType:authorizable) ${_knownUserIds} AND (name:(${q}) OR firstName:(${q}) OR lastName:(${q}) OR email:(${q}) OR title:(${q}) OR content:(${q}) OR widgetdata:(${q}) OR ngram:(${q}) OR edgengram:(${q}) ${_taguuids})))",
   "sakai:query-template-options": {
       "sort": "${sortOn} ${sortOrder}",
       "group": true,
@@ -11,7 +11,7 @@
   "_categoryAnd": "",
   "_knownGroupIds": "",
   "_knownUserIds": "",
-  "sakai:propertyprovider" : ["TagMatch","CategoryPropertyProvider","ContactIdsPropertyProvider","GroupsIdsPropertyProvider"],
+  "sakai:propertyprovider" : ["TagMatch","CategoryPropertyProvider","ContactIdsPropertyProvider","GroupIdsPropertyProvider"],
   "sakai:resultprocessor": "Profile",
   "sakai:title": "Users, Groups",
   "sakai:shortDescription": "Get the profiles of select users and groups.",
