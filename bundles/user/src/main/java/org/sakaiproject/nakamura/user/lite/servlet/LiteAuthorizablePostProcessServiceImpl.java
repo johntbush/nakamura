@@ -58,7 +58,8 @@ import java.util.Map;
 		strategy=ReferenceStrategy.EVENT, 
 		referenceInterface=LiteAuthorizablePostProcessor.class,
 		bind="bindAuthorizablePostProcessor",
-		unbind="unbindAuthorizablePostProcessor")
+		unbind="unbindAuthorizablePostProcessor",
+        target="(default=false)")
 public class LiteAuthorizablePostProcessServiceImpl extends AbstractOrderedService<LiteAuthorizablePostProcessor> implements LiteAuthorizablePostProcessService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LiteAuthorizablePostProcessServiceImpl.class);
