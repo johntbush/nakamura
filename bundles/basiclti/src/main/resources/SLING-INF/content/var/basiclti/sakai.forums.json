@@ -1,5 +1,5 @@
 {
-    "ltiurl":"http://localhost/imsblti/provider/sakai.forums",
+    "ltiurl":"https://dev.academic.rsmart.com/imsblti/provider/sakai.forums",
     "ltiurl_lock":true,
     "ltikey_lock":true,
     "ltisecret_lock":true,

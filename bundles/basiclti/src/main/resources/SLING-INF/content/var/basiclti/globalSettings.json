@@ -1,7 +1,7 @@
 {
-	"instanceContactEmail" : "admin@sakaiproject.org",
-	"instanceDescription" : "The Sakai Project",
-	"instanceGuid" : "sakaiproject.org",
-	"instanceName" : "Sakai",
-	"instanceUrl" : "http://sakaiproject.org"
+	"instanceContactEmail" : "info@rsmart.com",
+	"instanceDescription" : "rSmart",
+	"instanceGuid" : "dev.academic.rsmart.com",
+	"instanceName" : "rSmart Academic",
+	"instanceUrl" : "https://dev.academic.rsmart.com"
 }
