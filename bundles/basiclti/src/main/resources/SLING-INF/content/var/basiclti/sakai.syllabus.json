@@ -1,5 +1,5 @@
 {
-    "ltiurl":"http://localhost/imsblti/provider/sakai.syllabus",
+    "ltiurl":"https://dev.academic.rsmart.com/imsblti/provider/sakai.syllabus",
     "ltiurl_lock":true,
     "ltikey_lock":true,
     "ltisecret_lock":true,
