@@ -145,7 +145,27 @@ public class LiteAuthorizablePostProcessServiceImpl extends AbstractOrderedServi
     };
   }
 
+  protected void bindDefaultPostProcessor (LiteAuthorizablePostProcessor service, Map<String, Object> properties) {
+      for (LiteAuthorizablePostProcessor processor : orderedServices)
+      {
+          if (service.equals(processor))
+          {
+              LOGGER.debug("removing post processor {} from ordered list because it was added as the default", service);
+              removeService(service, properties);
+              break;
+          }
+      }
+
+      defaultPostProcessor = service;
+  }
+
   protected void bindAuthorizablePostProcessor(LiteAuthorizablePostProcessor service, Map<String, Object> properties) {
+
+    if (service.equals (defaultPostProcessor))
+    {
+        LOGGER.debug("skipping re-registration of default LiteAuthorizablePostProcessor, {}", service);
+        return;
+    }
     LOGGER.debug("About to add service " + service);
     addService(service, properties);
   }
