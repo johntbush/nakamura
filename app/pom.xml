@@ -20,7 +20,7 @@
       <version>1.0.0</version>
     </parent>
 
-    <artifactId>org.sakaiproject.nakamura.app</artifactId>
+    <artifactId>com.rsmart.academic.app</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0</version>
 
@@ -112,13 +112,13 @@
                         </addDefaultImplementationEntries>
                      </manifest>
                      <manifestEntries>
-                         <Specification-Title>Nakamura Server</Specification-Title>
+                         <Specification-Title>rSmart Academic</Specification-Title>
                          <Specification-Version>${project.version}</Specification-Version>
-                         <Specification-Vendor>The Sakai Foundation</Specification-Vendor>
-                         <Implementation-Title>Nakamura Server</Implementation-Title>
+                         <Specification-Vendor>rSmart</Specification-Vendor>
+                         <Implementation-Title>rSmart Academic</Implementation-Title>
                          <Implementation-Version>${project.version}</Implementation-Version>
                          <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
-                         <Implementation-Vendor>The Sakai Foundation</Implementation-Vendor>
+                         <Implementation-Vendor>rSmart</Implementation-Vendor>
                          <Main-Class>org.sakaiproject.nakamura.app.NakamuraMain</Main-Class>
                      </manifestEntries>
                    </archive>
