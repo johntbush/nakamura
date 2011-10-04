@@ -2,11 +2,10 @@ package org.sakaiproject.nakamura.message.search;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Property;
-import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.sakaiproject.nakamura.api.lite.Repository;
 import org.sakaiproject.nakamura.api.lite.Session;
+import org.sakaiproject.nakamura.api.lite.StorageClientUtils;
 import org.sakaiproject.nakamura.api.lite.authorizable.Authorizable;
 import org.sakaiproject.nakamura.api.lite.authorizable.AuthorizableManager;
 import org.sakaiproject.nakamura.api.lite.authorizable.Group;
@@ -31,10 +30,6 @@ public class GroupIdsPropertyProvider
 {
     private static final Logger
         LOG                                 = LoggerFactory.getLogger(GroupIdsPropertyProvider.class);
-
-    @Reference
-    protected transient Repository
-        repository                          = null;
 
     public static final String
         GROUP_IDS                           = "_knownGroupIds";
@@ -61,7 +56,8 @@ public class GroupIdsPropertyProvider
 
         try
         {
-            session = repository.loginAdministrative();
+            session = StorageClientUtils.adaptToSession(request
+                        .getResourceResolver().adaptTo(javax.jcr.Session.class));
             authorizableManager = session.getAuthorizableManager();
 
             user = authorizableManager.findAuthorizable(userId);

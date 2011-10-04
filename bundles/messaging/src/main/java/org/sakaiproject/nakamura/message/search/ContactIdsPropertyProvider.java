@@ -7,13 +7,10 @@ import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.sakaiproject.nakamura.api.connections.ConnectionManager;
 import org.sakaiproject.nakamura.api.connections.ConnectionState;
-import org.sakaiproject.nakamura.api.lite.Repository;
 import org.sakaiproject.nakamura.api.lite.Session;
-import org.sakaiproject.nakamura.api.lite.StorageClientException;
-import org.sakaiproject.nakamura.api.lite.accesscontrol.AccessDeniedException;
+import org.sakaiproject.nakamura.api.lite.StorageClientUtils;
 import org.sakaiproject.nakamura.api.search.SearchConstants;
 import org.sakaiproject.nakamura.api.search.solr.SolrSearchPropertyProvider;
-import org.sakaiproject.nakamura.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,10 +30,6 @@ public class ContactIdsPropertyProvider
 {
     private static final Logger
         LOG                                 = LoggerFactory.getLogger(ContactIdsPropertyProvider.class);
-
-    @Reference
-    protected transient Repository
-        repository                          = null;
 
     @Reference
     protected transient ConnectionManager
@@ -63,7 +56,8 @@ public class ContactIdsPropertyProvider
 
         try
         {
-            session = repository.loginAdministrative();
+            session = StorageClientUtils.adaptToSession(request
+                        .getResourceResolver().adaptTo(javax.jcr.Session.class));
         }
         catch (Exception e)
         {
