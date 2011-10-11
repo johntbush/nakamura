@@ -54,8 +54,8 @@
                            </jarWebSupport>
                            <additionalBundles>
                                  <bundle>
-                                     <groupId>org.sakaiproject.nakamura</groupId>
-                                     <artifactId>org.sakaiproject.nakamura.uxloader</artifactId>
+                                     <groupId>com.rsmart.nakamura</groupId>
+                                     <artifactId>com.rsmart.nakamura.uxloader</artifactId>
                                      <version>${ux}</version>
                                      <startLevel>30</startLevel>
                                  </bundle>
