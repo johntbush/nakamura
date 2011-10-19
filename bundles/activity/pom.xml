@@ -75,10 +75,13 @@
       <groupId>org.sakaiproject.nakamura</groupId>
       <artifactId>org.sakaiproject.nakamura.solr</artifactId>
     </dependency>
+    <!-- version number changed to reflect partial merge with sakaiproject
+	 this version number can be clobbered when the nexts sakaiproject
+         merge brings the files modules fully up to date -->
     <dependency>
       <groupId>org.sakaiproject.nakamura</groupId>
-      <artifactId>org.sakaiproject.nakamura.files</artifactId>
-      <version>1.0.2</version>
+      <artifactId>org.sakaiproject.nakamura.files.api</artifactId>
+      <version>1.0.2.rSmart</version>
     </dependency>
     <dependency>
        <groupId>com.googlecode.guava-osgi</groupId>
