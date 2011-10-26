@@ -79,6 +79,7 @@
         <module>bundles/world</module>
         <module>testscripts</module>
         <module>contrib/mysql-jdbc</module>
+        <module>contrib/postgresql-jdbc</module>
       </modules>
     </profile>
     <profile>

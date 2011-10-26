@@ -199,6 +199,11 @@ KERN-1187
         </bundle>
         <bundle>
             <groupId>org.sakaiproject.nakamura</groupId>
+            <artifactId>org.postgres</artifactId>
+            <version>9.0-801.jdbc4-1.0-SNAPSHOT</version>
+        </bundle>
+        <bundle>
+            <groupId>org.sakaiproject.nakamura</groupId>
             <artifactId>org.sakaiproject.nakamura.mysqljdbc</artifactId>
             <version>1.0.0</version>
         </bundle>
