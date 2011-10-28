@@ -11,7 +11,7 @@
 	<artifactId>org.sakaiproject.nakamura.mysqljdbc</artifactId>
 	<version>1.0.2</version>
 	<packaging>bundle</packaging>
-	<name>mysql jdbc bundle</name>
+	<name>Sakai Nakamura :: MySQL JDBC Bundle</name>
 	<description>
         This bundle simply wraps mysql-connector-java.jar.
     </description>
