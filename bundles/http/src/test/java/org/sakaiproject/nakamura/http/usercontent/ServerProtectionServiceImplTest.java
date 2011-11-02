@@ -305,8 +305,7 @@ public class ServerProtectionServiceImplTest {
     serverProtectionService = new ServerProtectionServiceImpl();
     Dictionary<String, Object> properties = new Hashtable<String, Object>();
     properties.put(ServerProtectionServiceImpl.TRUSTED_HOSTS_CONF, new String[]{
-            "www.somehost.edu:443 = https://www.somehost.edu/somewhereelse/index.html",
-            "www.somehost.edu:80 = http://www.somehost.edu/somewhereelse/index.html"
+            "www.somehost.edu = https://www.somehost.edu/somewhereelse/index.html"
     });
     Mockito.when(componentContext.getProperties()).thenReturn(properties);
     Mockito.when(componentContext.getBundleContext()).thenReturn(bundleContext);
