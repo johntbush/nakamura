@@ -1,5 +1,5 @@
 {
-  "password" : "testpasswd",
+  "password" : "admin",
   "serverUrl" : "http://localhost:8080/",
   "users.csv" : {
     "allowUpdate" : true
