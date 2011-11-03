@@ -39,21 +39,26 @@ class SisUserUploader < OaeImportBase
         # 7, etc - properties
 
         user = User.new(row[0])
-        user.firstName = row[1]
-        user.lastName = row[2]
+        user.lastName = row[1]
+        user.firstName = row[2]
         user.email = row[3]
         user.password = row[4]
         
+        if user.name == "admin" 
+            raise "You cannot update admin"
+        end
         
         props = @userManager.get_user_props(user.name)
         
         if (props["name"].nil?)
             # not found... create
             @userManager.create_user_object(user)
+            @created += 1
         else 
             #found... update
             if ($ALLOW_UPDATE)
                 user.update_user(@server)
+                @updated += 1
             end
     
             if ($UPDATE_PASSWORD)

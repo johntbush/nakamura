@@ -1,0 +1,7 @@
+{
+  "password" : "testpasswd",
+  "serverUrl" : "http://localhost:8080/",
+  "users.csv" : {
+    "allowUpdate" : true
+  }
+}
