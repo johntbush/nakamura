@@ -12,7 +12,7 @@ include OaeImport
 
 
 $ALLOW_UPDATE=true
-$UPDATE_PASSWORD=true
+$UPDATE_PASSWORD=false # always false
 
 if ARGV.size < 1
     puts "Usage: import-users.rb PATH_TO_CSV_FILE [PATH_TO_SERVER_CONFIG_FILE.json]"
@@ -22,6 +22,13 @@ end
 
 class SisUserUploader < OaeImportBase
     
+    attr_accessor :allow_update
+    attr_accessor :customProperties
+    
+    def initialize(serverInfoFile = nil)
+        super(serverInfoFile)
+        @allow_update = $ALLOW_UPDATE
+    end
     
     def createManager(server)
         @userManager = UserManager.new(server)
@@ -44,29 +51,51 @@ class SisUserUploader < OaeImportBase
         user.email = row[3]
         user.password = row[4]
         
-        if user.name == "admin" 
-            raise "You cannot update admin"
-        end
-        
         props = @userManager.get_user_props(user.name)
+        
+        processed = false
         
         if (props["name"].nil?)
             # not found... create
-            @userManager.create_user_object(user)
+            user = @userManager.create_user_object(user)
             @created += 1
+            processed = true
         else 
             #found... update
-            if ($ALLOW_UPDATE)
+            if (allow_update)
                 user.update_user(@server)
                 @updated += 1
+                processed = true
             end
-    
-            if ($UPDATE_PASSWORD)
-                # todo
-            end
-            
         end
         
+        if (processed && !customProperties.nil? && customProperties.count > 0)
+            
+            props = {}
+            
+            customProperties.each_with_index {
+                |name, index|
+
+                props[name] = row[7 + index]
+            }
+            
+            user.update_properties(@server, props)
+        end
+    end
+    
+    def processServerProps(serverInfoFile)
+        
+        ret = super(serverInfoFile)
+        
+        @allow_update = @serverProps["users.csv"]["allowUpdate"] || $ALLOW_UPDATE
+        
+        @customProperties = @serverProps["users.csv"]["customProperties"]
+        
+        return ret
+    end
+    
+    def subject()
+        return "users.csv file processed on " + currentDate() 
     end
     
 end

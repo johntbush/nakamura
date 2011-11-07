@@ -1,7 +1,12 @@
 {
   "password" : "admin",
+  "reportEmail" : "oae2@dovevalleyapps.com",
   "serverUrl" : "http://localhost:8080/",
   "users.csv" : {
-    "allowUpdate" : true
+    "allowUpdate" : true,
+    "customProperties" : [
+      "testProp1",
+      "testProp2"
+    ]
   }
 }
