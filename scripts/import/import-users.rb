@@ -69,15 +69,17 @@ class SisUserUploader < OaeImportBase
             end
         end
         
-        if (processed && !customProperties.nil? && customProperties.count > 0)
+        if (processed)
+            props = {"cle_userType"=>row[5]}
             
-            props = {}
-            
-            customProperties.each_with_index {
-                |name, index|
+            if (!customProperties.nil? && customProperties.count > 0)
+                
+                customProperties.each_with_index {
+                    |name, index|
 
-                props[name] = row[7 + index]
-            }
+                    props[name] = row[7 + index]
+                }
+            end
             
             user.update_properties(@server, props)
         end
