@@ -4,6 +4,7 @@ require 'rubygems'
 require 'json'
 require 'nakamura'
 require 'nakamura/users'
+require 'pony'
 include SlingInterface
 include SlingUsers
 
@@ -44,13 +45,35 @@ module OaeImport
             
             return s
         end
+
+        def currentDate()
+            t = Time.now
+            ret = t.strftime("run on %m/%d/%Y")   #=> "Printed on 04/09/2003"
+            ret += t.strftime("at %I:%M%p")            #=> "at 08:56AM"
+            return ret
+        end
         
+        def subject()
+            return "unkonw file processed on " + currentDate() 
+        end
+        
+        def sendEmail(message) 
+            toAddress = @serverProps["reportEmail"]
+            
+            if (toAddress.nil?) 
+                return
+            end
+            
+            fromAddress = @serverProps["reportEmailFrom"] || "no-reply@rsmart.com"
+            
+            Pony.mail(:to => toAddress, :from => fromAddress, :subject => subject(), :body => message)
+        end
+            
         def sendReport(message) 
             
             @log.warn(message)
-            
-            # todo email report if email set
-            
+
+            sendEmail(message)
         end
         
         def initialize(serverInfoFile = nil)
