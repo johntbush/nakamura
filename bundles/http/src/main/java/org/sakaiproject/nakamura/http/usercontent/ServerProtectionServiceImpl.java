@@ -239,7 +239,7 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
 			}
 			String[] hostHeader = StringUtils.split(
 					applicationContentHostPair[0], ":", 2);
-			if (hostHeader == null || hostHeader.length != 2) {
+			if (hostHeader == null || hostHeader.length == 0) {
 				throw new IllegalArgumentException(
 						"Application Host Must contain port " + h);
 			}
@@ -249,27 +249,22 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
 			// discriminate on protocol.
 			LOGGER.info("Adding {} {} ", applicationContentHostPair[0],
 					applicationContentHostPair[1]);
+			redirects.put(applicationContentHostPair[0],
+						applicationContentHostPair[1]);
 			if ("http".equals(proto[0])) {
-				if ("80".equals(hostHeader[1])) {
-					redirects.put(applicationContentHostPair[0],
-							applicationContentHostPair[1]);
+				if (hostHeader.length > 1 && "80".equals(hostHeader[1])) {
 					referrers.put(applicationContentHostPair[0], "http://"
 							+ hostHeader[0]);
 				} else {
-					redirects.put(applicationContentHostPair[0],
-							applicationContentHostPair[1]);
 					referrers.put(applicationContentHostPair[0], "http://"
 							+ applicationContentHostPair[0]);
 				}
 			} else if ("https".equals(proto[0])) {
-				if ("443".equals(hostHeader[1])) {
-					redirects.put(applicationContentHostPair[0],
-							applicationContentHostPair[1]);
+				// requests on default ports will not have the port in the referrer.
+				if (hostHeader.length > 1 && "443".equals(hostHeader[1])) {
 					referrers.put(applicationContentHostPair[0], "https://"
 							+ hostHeader[0]);
 				} else {
-					redirects.put(applicationContentHostPair[0],
-							applicationContentHostPair[1]);
 					referrers.put(applicationContentHostPair[0], "https://"
 							+ applicationContentHostPair[0]);
 				}
@@ -516,8 +511,21 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
   }
 
   private String buildTrustedHostHeader(HttpServletRequest request) {
-	  // dont use the Host header, trust the mechanisms in the Servlet API. see http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletRequest.html#getServerName()
-	  return request.getServerName()+":"+request.getServerPort();
+	  // try the host header first
+	  String host = request.getHeader("Host");
+	  if ( host != null && host.trim().length() > 0 ) {
+		  return host;
+	  }
+	  // if not suitable resort to letting jetty build the host header
+	  int port = request.getServerPort();
+	  String scheme = request.getScheme();
+	  String serverName = request.getServerName();
+	  // default ports are not added to the header.
+	  if ( (port == 80 && "http".equals(scheme)) || (port == 443 && "https".equals(scheme))) {
+		  return serverName; 
+	  } else {
+		  return serverName+":"+port;
+	  }
   }
   private String createMessage(String url, String userId, String ts ) {
     // strip the protocol since it wont survive front end proxies, if those proxies re-write the protocol.
