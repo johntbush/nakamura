@@ -64,7 +64,6 @@
         <module>bundles/chat</module>
         <module>bundles/doc</module>
         <module>bundles/docproxy</module>
-        <module>bundles/google-collections</module>
         <module>bundles/woodstox</module>
         <module>bundles/calendar</module>
         <module>bundles/authz</module>
@@ -902,10 +901,9 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>com.google.collections</groupId>
-        <artifactId>google-collections</artifactId>
-        <version>0.8</version>
-        <scope>provided</scope>
+        <groupId>com.googlecode.guava-osgi</groupId>
+        <artifactId>guava-osgi</artifactId>
+        <version>9.0.0</version>
       </dependency>
       <dependency>
         <groupId>net.sf.ehcache</groupId>
@@ -980,14 +978,14 @@
       <dependency>
         <groupId>org.apache.solr</groupId>
         <artifactId>solr-solrj</artifactId>
-        <version>4.0.1040465</version>
+        <version>4.0.1162474</version>
       </dependency>
       
       <!-- sparsemapcontent storage layer -->
       <dependency>
         <groupId>org.sakaiproject.nakamura</groupId>
         <artifactId>org.sakaiproject.nakamura.core</artifactId>
-        <version>1.1-20111013</version>
+        <version>1.2</version>
         <scope>compile</scope>
       </dependency>
 
@@ -995,7 +993,7 @@
       <dependency>
         <groupId>org.sakaiproject.nakamura</groupId>
         <artifactId>org.sakaiproject.nakamura.solr</artifactId>
-        <version>1.0.2</version>
+        <version>1.1</version>
         <scope>provided</scope>
       </dependency>
 							      

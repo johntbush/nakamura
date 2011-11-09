@@ -86,7 +86,7 @@
     <dependency>
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-core</artifactId>
-      <version>4.0.1040465</version>
+      <version>4.0.1162474</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

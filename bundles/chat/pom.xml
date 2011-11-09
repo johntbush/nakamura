@@ -50,8 +50,8 @@
 	</build>
 	<dependencies>
       <dependency>
-        <groupId>com.google.collections</groupId>
-        <artifactId>google-collections</artifactId>
+       <groupId>com.googlecode.guava-osgi</groupId>
+       <artifactId>guava-osgi</artifactId>
       </dependency>
 		<dependency>
 			 <groupId>org.sakaiproject.nakamura</groupId>
@@ -152,7 +152,7 @@
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
-			<version>1.4.1</version>
+			<version>4.0.1162474</version>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>

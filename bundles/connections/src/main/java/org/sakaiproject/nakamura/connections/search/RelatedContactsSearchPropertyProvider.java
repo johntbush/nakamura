@@ -19,7 +19,12 @@ package org.sakaiproject.nakamura.connections.search;
 
 import static org.sakaiproject.nakamura.api.connections.ConnectionConstants.SEARCH_PROP_CONNECTIONSTORE;
 
-import com.google.common.base.Join;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Properties;
@@ -40,12 +45,7 @@ import org.sakaiproject.nakamura.connections.ConnectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.google.common.base.Joiner;
 
 /**
  * <pre>
@@ -133,13 +133,13 @@ public class RelatedContactsSearchPropertyProvider implements SolrSearchProperty
         // to prevent solr parse errors
         relatedConnectionPaths.add(String.valueOf(false));
       }
-      final String connectionPath = Join.join(" OR ", relatedConnectionPaths);
+      final String connectionPath = Joiner.on(" OR ").join(relatedConnectionPaths);
       propertiesMap.put(SEARCH_PROP_CONNECTIONSTORE, connectionPath);
 
       if (allTagUuids.isEmpty()) { // to prevent solr parse errors
         allTagUuids.add(String.valueOf(false));
       }
-      propertiesMap.put("tagUuids", Join.join(" OR ", allTagUuids));
+      propertiesMap.put("tagUuids", Joiner.on(" OR ").join(allTagUuids));
 
     } catch (AccessDeniedException e) {
       LOG.error(e.getLocalizedMessage(), e);
