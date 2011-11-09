@@ -49,7 +49,7 @@ module OaeImport
         def currentDate()
             t = Time.now
             ret = t.strftime("run on %m/%d/%Y")   #=> "Printed on 04/09/2003"
-            ret += t.strftime("at %I:%M%p")            #=> "at 08:56AM"
+            ret += t.strftime(" at %I:%M%p")            #=> "at 08:56AM"
             return ret
         end
         
@@ -102,6 +102,10 @@ module OaeImport
             end
         end
     
+        def updatedLabel
+          return "updated"
+        end
+    
         def processFile(csvFile) 
             exceptions = ""
             @total = 0
@@ -122,7 +126,7 @@ module OaeImport
                 end
             end
             
-            report = "created #{created}\nupdated #{updated}\nfailed #{exceptional}\ntotal #{total}\n\n"
+            report = "created #{created}\n#{updatedLabel} #{updated}\nfailed #{exceptional}\ntotal #{total}\n\n"
             report << exceptions
 
             sendReport(report)

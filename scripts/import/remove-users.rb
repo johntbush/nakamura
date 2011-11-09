@@ -15,7 +15,7 @@ $ALLOW_UPDATE=true
 $UPDATE_PASSWORD=false # always false
 
 if ARGV.size < 1
-    puts "Usage: import-users.rb PATH_TO_CSV_FILE [PATH_TO_SERVER_CONFIG_FILE.json]"
+    puts "Usage: remove-users.rb PATH_TO_CSV_FILE [PATH_TO_SERVER_CONFIG_FILE.json]"
     exit 1
 end
 
@@ -30,11 +30,21 @@ class SisUserUploader < OaeImportBase
         
         # 0 - EID
         
-        @userManager.delete_user(row[0]);
+        success = @userManager.delete_user(row[0]);
+        
+        if success
+          @updated += 1
+        else 
+          @exceptional += 1
+        end
     end
     
+    def updatedLabel
+      return "removed"
+    end
+
     def subject()
-        return "removeusers.csv file processed on " + currentDate() 
+        return "removeusers.csv file processed: " + currentDate() 
     end
     
 end
