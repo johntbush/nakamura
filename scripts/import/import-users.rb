@@ -97,7 +97,7 @@ class SisUserUploader < OaeImportBase
     end
     
     def subject()
-        return "users.csv file processed on " + currentDate() 
+        return "users.csv file processed: " + currentDate() 
     end
     
 end
