@@ -586,7 +586,7 @@ KERN-1187
          merge brings the files modules fully up to date -->
     <bundle>
       <groupId>org.sakaiproject.nakamura</groupId>
-      <artifactId>org.sakaiproject.nakamura.files.impl</artifactId>
+      <artifactId>org.sakaiproject.nakamura.files</artifactId>
       <version>1.0.2.rSmart</version>
     </bundle>
     <bundle>
