@@ -674,17 +674,17 @@ KERN-1187
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>hubspot-rest</artifactId>
-      <version>0.1</version>
+      <version>1.0.2-M2</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>com.rsmart.nakamura.registration</artifactId>
-      <version>0.1</version>
+      <version>1.0.2-M2</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>acceptterms</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>1.0.2-M2</version>
     </bundle>
    </startLevel>
 </bundles>
