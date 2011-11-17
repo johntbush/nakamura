@@ -100,6 +100,10 @@ class SisUserUploader < OaeImportBase
         return "users.csv file processed: " + currentDate() 
     end
     
+    def skipFirstRow()
+      return skipFirstRowConfig("users.csv")
+    end
+    
 end
 
 
