@@ -36,8 +36,6 @@ module OaeImport
             serverUrl = @serverProps["serverUrl"] || "http://localhost:8080/"
             adminPwd = @serverProps["password"] || "admin"
             
-            puts "server info: #{serverUrl} and #{adminPwd}"
-            
             s = Sling.new(serverUrl)
             
             admin = User.new("admin", adminPwd)
@@ -113,17 +111,22 @@ module OaeImport
             @created = 0
             @updated = 0
             
+            skip = skipFirstRow()
+            
             CSV.open(csvFile, 'r') do |row|
-                begin 
-                    @total += 1
-                    processRow(row)
-                rescue Exception => e
-                    @exceptional += 1
-                    @log.warn(e.message)
-                    @log.warn(e.backtrace)
-                    exceptions << e.message
-                    exceptions << "\n"
+                if (!skip)
+                  @total += 1
+                  begin 
+                      processRow(row)
+                  rescue Exception => e
+                      @exceptional += 1
+                      @log.warn(e.message)
+                      @log.warn(e.backtrace)
+                      exceptions << e.message
+                      exceptions << "\n"
+                  end
                 end
+                skip = false
             end
             
             report = "created #{created}\n#{updatedLabel} #{updated}\nfailed #{exceptional}\ntotal #{total}\n\n"
@@ -134,6 +137,18 @@ module OaeImport
         
         def processRow(row)
            puts 'need to implement "processRow"' 
+        end
+        
+        def skipFirstRow()
+          return true
+        end
+        
+        def skipFirstRowConfig(fileKey) 
+          if (@serverProps)
+            return @serverProps[fileKey]["skipHeaderRow"]
+          else 
+            return true
+          end
         end
         
     end

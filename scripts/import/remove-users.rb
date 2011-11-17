@@ -47,6 +47,10 @@ class SisUserUploader < OaeImportBase
         return "removeusers.csv file processed: " + currentDate() 
     end
     
+    def skipFirstRow()
+      return skipFirstRowConfig("remove-users.csv")
+    end
+    
 end
 
 

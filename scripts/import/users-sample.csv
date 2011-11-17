@@ -1,3 +1,4 @@
+"EID","Last Name","First Name","Email","Password","User Type","Internal Id","eppn","testval"
 admin,Administrator,Alexa,noone@nowhere.com,password,maintain,admin,val1,val2
 aphillips,Phillips,Anna,noone@nowhere.com,password,maintain,aphillips,val1,val2
 bkoppelman,Koppelman,Brian,noone@nowhere.com,password,maintain,bkoppelman,val1,val2

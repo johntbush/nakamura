@@ -3,10 +3,14 @@
   "reportEmail" : "oae2@dovevalleyapps.com",
   "serverUrl" : "http://localhost:8080/",
   "users.csv" : {
-    "allowUpdate" : true,
+    "allowUpdate" : false,
+    "skipHeaderRow" : true,
     "customProperties" : [
       "testProp1",
       "testProp2"
     ]
+  },
+  "remove-users.csv" : {
+    "skipHeaderRow" : false
   }
 }
