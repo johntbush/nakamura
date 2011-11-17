@@ -32,7 +32,7 @@ import org.sakaiproject.nakamura.api.lite.StorageClientException;
 import org.sakaiproject.nakamura.api.lite.StorageClientUtils;
 import org.sakaiproject.nakamura.api.lite.accesscontrol.AccessDeniedException;
 import org.sakaiproject.nakamura.api.presence.PresenceService;
-import org.sakaiproject.nakamura.api.profile.ProfileService;
+import org.sakaiproject.nakamura.api.user.BasicUserInfoService;
 import org.sakaiproject.nakamura.api.search.SearchConstants;
 import org.sakaiproject.nakamura.api.search.solr.Result;
 import org.sakaiproject.nakamura.api.search.solr.SolrSearchBatchResultProcessor;
@@ -68,8 +68,8 @@ public class ProfileContactsSearchResultProcessor extends ProfileNodeSearchResul
   }
 
   ProfileContactsSearchResultProcessor(SolrSearchServiceFactory searchServiceFactory,
-      ProfileService profileService, PresenceService presenceService) {
-    super(searchServiceFactory, profileService, presenceService);
+      BasicUserInfoService basicUserInfoService, PresenceService presenceService) {
+    super(searchServiceFactory, basicUserInfoService, presenceService);
   }
 
   public void writeResults(SlingHttpServletRequest request, JSONWriter write,

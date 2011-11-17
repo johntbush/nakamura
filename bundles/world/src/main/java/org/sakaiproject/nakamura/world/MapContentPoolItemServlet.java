@@ -119,7 +119,7 @@ public class MapContentPoolItemServlet extends SlingAllMethodsServlet {
       } else {
         token = new Content(tokenPath, null);
       }
-      accessControlManager.signContentToken(token, targetContentPath);
+      accessControlManager.signContentToken(token, Security.ZONE_CONTENT, targetContentPath);
       contentManager.update(token);
 
       response.sendError(HttpServletResponse.SC_OK);

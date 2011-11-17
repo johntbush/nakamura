@@ -219,8 +219,8 @@
 		<version>0.9.20</version>
 	</dependency>
     <dependency>
-      <groupId>com.google.collections</groupId>
-      <artifactId>google-collections</artifactId>
+       <groupId>com.googlecode.guava-osgi</groupId>
+       <artifactId>guava-osgi</artifactId>
     </dependency>
   </dependencies>
 </project>

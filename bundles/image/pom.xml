@@ -45,8 +45,8 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.collections</groupId>
-      <artifactId>google-collections</artifactId>
+       <groupId>com.googlecode.guava-osgi</groupId>
+       <artifactId>guava-osgi</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

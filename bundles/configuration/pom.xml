@@ -39,27 +39,10 @@
             <Export-Package> org.sakaiproject.nakamura.api.configuration </Export-Package>
             <Import-Package> * </Import-Package>
             <Embed-Transitive>true</Embed-Transitive>
-            <Embed-Dependency>google-collections
+            <Embed-Dependency>
             </Embed-Dependency>
           </instructions>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>embed-dependencies</id>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <includeArtifactIds>google-collections</includeArtifactIds>
-              <excludeTransitive>false</excludeTransitive>
-              <outputDirectory> ${project.build.outputDirectory} </outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
@@ -81,9 +64,8 @@
     </dependency>
     <!--  this is bundled but not exposed so we dont have to depend on the guice module that depends on this. -->
     <dependency>
-      <groupId>com.google.collections</groupId>
-      <artifactId>google-collections</artifactId>
-      <scope>compile</scope>
+       <groupId>com.googlecode.guava-osgi</groupId>
+       <artifactId>guava-osgi</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>

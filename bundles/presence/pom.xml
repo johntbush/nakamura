@@ -88,6 +88,12 @@
     </dependency>
     <dependency>
       <groupId>org.sakaiproject.nakamura</groupId>
+      <artifactId>org.sakaiproject.nakamura.user</artifactId>
+      <version>1.0.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sakaiproject.nakamura</groupId>
       <artifactId>org.sakaiproject.nakamura.cluster</artifactId>
       <version>1.0.2</version>
       <scope>provided</scope>
@@ -131,8 +137,8 @@
       <artifactId>commons-lang</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.collections</groupId>
-      <artifactId>google-collections</artifactId>
+       <groupId>com.googlecode.guava-osgi</groupId>
+       <artifactId>guava-osgi</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
@@ -165,10 +171,13 @@
     	<scope>test</scope>
     </dependency>
     <!-- servlet -->
+    <!-- version number changed to reflect partial merge with sakaiproject
+         this version number can be clobbered when the nexts sakaiproject
+         merge brings the files modules fully up to date -->
     <dependency>
       <groupId>org.sakaiproject.nakamura</groupId>
-      <artifactId>org.sakaiproject.nakamura.files</artifactId>
-      <version>1.0.2</version>
+      <artifactId>org.sakaiproject.nakamura.files.api</artifactId>
+      <version>1.0.2.rSmart</version>
     </dependency>
   </dependencies>
 </project>

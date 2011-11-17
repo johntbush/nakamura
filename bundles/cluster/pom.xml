@@ -143,9 +143,8 @@
     </dependency>
   
     <dependency>
-    	<groupId>com.google.collections</groupId>
-    	<artifactId>google-collections</artifactId>
-    	<type>jar</type>
+       <groupId>com.googlecode.guava-osgi</groupId>
+       <artifactId>guava-osgi</artifactId>
     	<scope>test</scope>
     </dependency>
   </dependencies>
