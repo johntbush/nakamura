@@ -1,6 +1,12 @@
 rSmart Nakamura Changelog
 =========================
 
+acad-1.0.2-M3-20111202
+----------------------
+
+* NOJIRA prepare for 1.0.2-M3 9f3d2ce
+* added ability to skip first row 72bac2f
+
 acad-1.0.2-M2-20111116
 ----------------------
 
