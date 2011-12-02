@@ -470,9 +470,10 @@ KERN-1187
    </startLevel>
    <startLevel level="15" >
         <bundle>
-            <groupId>org.sakaiproject.nakamura</groupId>
+            <!-- TODO move back to mainline when ACAD-255 is fixed -->
+            <groupId>com.rsmart</groupId>
             <artifactId>org.sakaiproject.nakamura.core</artifactId>
-            <version>1.2</version>
+            <version>1.2.1</version>
         </bundle>
         <bundle>
             <groupId>org.sakaiproject.nakamura</groupId>
@@ -674,17 +675,17 @@ KERN-1187
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>hubspot-rest</artifactId>
-      <version>1.0.2-M2</version>
+      <version>1.0.2-M3</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>com.rsmart.nakamura.registration</artifactId>
-      <version>1.0.2-M2</version>
+      <version>1.0.2-M3</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>acceptterms</artifactId>
-      <version>1.0.2-M2</version>
+      <version>1.0.2-M3</version>
     </bundle>
    </startLevel>
 </bundles>
