@@ -1,6 +1,46 @@
 rSmart Nakamura Changelog
 =========================
 
+acad-1.0.2-M2-20111116
+----------------------
+
+* ACAD-168 corrected commons-lang version in appliation launcher a77b47e
+* NOJIRA updated artifact versions for 1.0.2-M2 bff132f
+* ACAD-168 fixed pom version errors 899582e
+* ACAD-168 tagging in sparse. squashed commits; these have been cherry-picked from sakaiproject/master, or are minor mods to compensate for 
+* ACAD-195 Performance issues when loading the participants widget for groups with more than 25 members b46ff9f
+* KERN-2270 responding to Ray's concerns (cherry picked from commit e2c65567156fc2b26dc7d5e12946c60758e2a6af) 8c77914
+* ACAD-113 ACAD-144 Upgrade to sparsemapcontent 1.2 / solr 1.1 f15e32c
+* added remove users 20334c5
+* added remove users d048d07
+* added directions for the nakamura-ruby gem ea70abd
+* added cle_userType for the userType field b36ec65
+* added properties and email report b5a3ef2
+* testing a commit 04e4959
+* adding exception handling and report to class eeacce9
+* adding new import user process 92b23ff
+* added remove users a190157
+* added remove users 4884e2b
+* added directions for the nakamura-ruby gem 7058457
+* ACAD-174 KERN-2334 404 when trying to download content b588314
+* added cle_userType for the userType field e374dcd
+* added properties and email report 6a8e7d0
+* KERN-2211 - version working with unit and integration tests (cherry picked from commit a6a5df3f4ae3715e5b35f94a024fdd1daf3f320c) 0412f1d
+* testing a commit e30158b
+* adding exception handling and report to class 679f832
+* adding new import user process bed66c2
+* Fixed unit test, With the previous change, if runnign http and https on the same host at the same time, all redirects must go to the https
+* Allow protection on default ports whem the browser is passing headers with no port.(cherry picked from commit f27139f21b0550b416293bde8656
+* fixed version of mysqljdbc c6d5341
+* fixed the path to point to relative parent 8e86310
+* ACAD-122 Non-resolvable parent POM: Could not find artifact org.sakaiproject.nakamura:base:pom:1.0.2 7186c78
+* ACAD-115 Implement new ServerProtectionService 2214ec3
+* NOJIRA switched mysql jdbc driver bundle from 1.0.0 to 1.0.2 to fix build errors f3a9a60
+* NOJIRA change app version to SNAPSHOT and rename mysql jdbc bundle name 1cd81d7
+* ACAD-103 Enable postgres jdbc driver 839e074
+* ACAD-103 Enable postgres jdbc driver 5c0c86a
+* NOJIRA Added CHANGELOG f977936
+
 acad-1.0.2-M1-20111024
 ----------------------
 
