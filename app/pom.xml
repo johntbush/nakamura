@@ -55,7 +55,7 @@
                            <additionalBundles>
                                  <bundle>
                                      <groupId>com.rsmart.nakamura</groupId>
-                                     <artifactId>com.rsmart.nakamura.uxloader</artifactId>
+                                     <artifactId>com.rsmart.nakamura.uxloader.oipp</artifactId>
                                      <version>${ux}</version>
                                      <startLevel>30</startLevel>
                                  </bundle>
