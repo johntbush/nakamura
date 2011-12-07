@@ -680,7 +680,7 @@ KERN-1187
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>authn-token-remapping</artifactId>
-      <version>0.1</version>
+      <version>1.0.2-M3</version>
     </bundle>
    </startLevel>
 </bundles>
