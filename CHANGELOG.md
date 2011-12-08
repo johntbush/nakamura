@@ -1,6 +1,13 @@
 rSmart Nakamura Changelog
 =========================
 
+acad-1.0.2-M4-20111208
+----------------------
+
+* NOJIRA ignore script/.contentpreview.success file from preview processor 2151c1e
+* ACAD-273 Disable preview processor failures until we have processor working as expected. 3cf26fb
+* KERN-2412 Improve preview_processor logging on backtrace 69b828e
+
 acad-1.0.2-M3-20111202
 ----------------------
 
