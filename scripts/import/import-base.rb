@@ -115,15 +115,17 @@ module OaeImport
             
             CSV.open(csvFile, 'r') do |row|
                 if (!skip)
-                  @total += 1
-                  begin 
-                      processRow(row)
-                  rescue Exception => e
-                      @exceptional += 1
-                      @log.warn(e.message)
-                      @log.warn(e.backtrace)
-                      exceptions << e.message
-                      exceptions << "\n"
+                  if row[0] != nil
+                    @total += 1
+                    begin 
+                        processRow(row)
+                    rescue Exception => e
+                        @exceptional += 1
+                        @log.warn(e.message)
+                        @log.warn(e.backtrace)
+                        exceptions << e.message
+                        exceptions << "\n"
+                    end
                   end
                 end
                 skip = false
