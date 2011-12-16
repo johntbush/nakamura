@@ -1,6 +1,32 @@
 rSmart Nakamura Changelog
 =========================
 
+oipp-acad-1.0.2-M5-20111216
+---------------------------
+
+* fixed problem with blank row ACAD-477 c19c315
+* NOJIRA ignore script/.contentpreview.success file from preview processor 2151c1e
+* ACAD-273 Disable preview processor failures until we have processor working as expected. 3cf26fb
+
+acad-1.0.2-M5-20111215
+----------------------
+* No changes
+
+acad-1.0.2-M4-20111208
+----------------------
+
+* NOJIRA ignore script/.contentpreview.success file from preview processor 2151c1e
+* ACAD-273 Disable preview processor failures until we have processor working as expected. 3cf26fb
+* KERN-2412 Improve preview_processor logging on backtrace 69b828e
+
+oipp-acad-1.0.2-M3-20111207
+---------------------------
+
+* ACAD-175 changed deployment artifact name for oipp 5bcd795
+* ACAD-177 assembling release d534101
+* ACAD-175 altered dependency on 3akai-ux to match oipp-develop artifact; removed unwanted components from deployment ed34c5a
+* KERN-2412 Improve preview_processor logging on backtrace 69b828e
+
 acad-1.0.2-M3-20111202
 ----------------------
 
