@@ -157,8 +157,8 @@ else
     git clone -q git://github.com/sakaiproject/nakamura.git
     cd nakamura
     git checkout -b "build-$K2_TAG" $K2_TAG
-    perl -pwi -e 's/sakaiproject\.org/rsmart\.com/gi' bundles/basiclti/src/main/resources/SLING-INF/content/var/basiclti/globalSettings.json
-    perl -pwi -e 's/http:\/\/localhost/https:\/\/dev\.academic\.rsmart\.com/gi' bundles/basiclti/src/main/resources/SLING-INF/content/var/basiclti/sakai*.json
+    perl -pwi -e 's/http:\/\/sakaiproject\.org/http:\/\/sakai3-nightly\.uits\.indiana\.edu/gi' bundles/basiclti/src/main/resources/SLING-INF/content/var/basiclti/globalSettings.json
+    perl -pwi -e 's/http:\/\/localhost/http:\/\/sakai3-nightly\.uits\.indiana\.edu:8088/gi' bundles/basiclti/src/main/resources/SLING-INF/content/var/basiclti/sakai*.json
     mvn -B -e clean install
     #install optional mysql driver
     cd contrib/mysql-jdbc
