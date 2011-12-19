@@ -74,7 +74,7 @@ import javax.servlet.http.HttpServletResponse;
     @Property(name = "service.vendor", value = "The Sakai Foundation"),
     @Property(name = "service.description", value = "Endpoint to count messages in a messagestore.") })
 @ServiceDocumentation(
-    name = "LiteCountServlet documentation", okForVersion = "0.11",
+    name = "LiteCountServlet documentation", okForVersion = "1.1",
     shortDescription = "Count all the internal messages a user has.",
     description = "Counts all the internal messages a user has.",
     bindings = @ServiceBinding(type = BindingType.TYPE, 
@@ -155,8 +155,8 @@ public class LiteCountServlet extends SlingSafeMethodsServlet {
       } else {
         itemCount = MAX_RESULTS_COUNTED;
       }
-      Map<String, String> queryOptions = ImmutableMap.of(
-          PARAMS_ITEMS_PER_PAGE, Long.toString(itemCount),
+      Map<String, Object> queryOptions = ImmutableMap.of(
+          PARAMS_ITEMS_PER_PAGE, (Object) Long.toString(itemCount),
           CommonParams.START, "0",
           CommonParams.SORT, "_created desc"
       );

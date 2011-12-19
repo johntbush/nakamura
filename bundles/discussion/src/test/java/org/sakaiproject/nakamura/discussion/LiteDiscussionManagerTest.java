@@ -59,7 +59,6 @@ public class LiteDiscussionManagerTest {
    * Login as administrator
    *
    * @return Returns the administrator session.
-   * @throws LoginException
    * @throws RepositoryException
    * @throws IOException
    */

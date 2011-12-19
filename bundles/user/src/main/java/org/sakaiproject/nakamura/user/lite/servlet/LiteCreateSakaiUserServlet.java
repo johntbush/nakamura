@@ -27,7 +27,7 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.servlets.HtmlResponse;
-import org.apache.sling.commons.osgi.OsgiUtil;
+import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.sling.servlets.post.Modification;
 import org.apache.sling.servlets.post.ModificationType;
 import org.apache.sling.servlets.post.SlingPostConstants;
@@ -123,7 +123,7 @@ import javax.servlet.http.HttpServletResponse;
         "EEE MMM dd yyyy HH:mm:ss 'GMT'Z", "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
         "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd", "dd.MM.yyyy HH:mm:ss", "dd.MM.yyyy" }),
     @Property(name = "self.registration.enabled", boolValue = true) })
-@ServiceDocumentation(name = "Create User Servlet", okForVersion = "0.11",
+@ServiceDocumentation(name = "Create User Servlet", okForVersion = "1.1",
   description = "Creates a new user. Maps on to nodes of resourceType sparse/users like "
     + "/system/userManager/user. "
     + "This servlet responds at /system/userManager/user.create.html",
@@ -244,7 +244,7 @@ public class LiteCreateSakaiUserServlet extends LiteAbstractUserPostServlet {
   protected void activate(ComponentContext componentContext) {
     super.activate(componentContext);
     Dictionary<?, ?> props = componentContext.getProperties();
-    selfRegistrationEnabled = OsgiUtil.toBoolean(props.get(PROP_SELF_REGISTRATION_ENABLED), DEFAULT_SELF_REGISTRATION_ENABLED);
+    selfRegistrationEnabled = PropertiesUtil.toBoolean(props.get(PROP_SELF_REGISTRATION_ENABLED), DEFAULT_SELF_REGISTRATION_ENABLED);
   }
 
   /*

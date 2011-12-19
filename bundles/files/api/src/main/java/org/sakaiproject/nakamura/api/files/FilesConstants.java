@@ -110,6 +110,10 @@ public interface FilesConstants {
    */
   public static final String POOLED_CONTENT_USER_MANAGER = "sakai:pooled-content-manager";
   /**
+   * The name for the editors property on the pooled content members node.
+   */
+  public static final String POOLED_CONTENT_USER_EDITOR = "sakai:pooled-content-editor";
+  /**
    * The name for the viewers property on the pooled content members node.
    */
   public static final String POOLED_CONTENT_USER_VIEWER = "sakai:pooled-content-viewer";
@@ -138,6 +142,12 @@ public interface FilesConstants {
    * Expected to be populated by the preview processor script.
    */
   public static final String POOLED_CONTENT_HAS_PREVIEW = "sakai:hasPreview";
+
+  /**
+   * Property to specify that content should show in a result feed even if
+   * it is many levels indirect from the user doing the search.
+   */
+  public static final String POOLED_CONTENT_SHOW_ALWAYS = "sakai:showalways";
 
   /**
    * Selector for feed of related content which is accessible by any logged-in user.

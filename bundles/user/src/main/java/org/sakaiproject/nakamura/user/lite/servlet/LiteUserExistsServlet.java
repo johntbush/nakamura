@@ -28,10 +28,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
-import org.apache.sling.commons.osgi.OsgiUtil;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.sakaiproject.nakamura.api.doc.BindingType;
 import org.sakaiproject.nakamura.api.doc.ServiceBinding;
 import org.sakaiproject.nakamura.api.doc.ServiceDocumentation;
@@ -86,7 +83,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <h4>Notes</h4>
  */
-@ServiceDocumentation(name="User Exists Servlet", okForVersion = "0.11",
+@ServiceDocumentation(name="User Exists Servlet", okForVersion = "1.1",
     description="Tests for existence of user. This servlet responds at /system/userManager/user.exists.html",
     shortDescription="Tests for existence of user",
     bindings=@ServiceBinding(type=BindingType.PATH,bindings="/system/userManager/user",
@@ -162,7 +159,7 @@ public class LiteUserExistsServlet extends SlingSafeMethodsServlet {
 
   @Activate @Modified
   protected void modified(Map<?, ?> props) {
-    delayMs = OsgiUtil.toLong(props.get(USER_EXISTS_DELAY_MS_PROPERTY),
+    delayMs = PropertiesUtil.toLong(props.get(USER_EXISTS_DELAY_MS_PROPERTY),
         USER_EXISTS_DELAY_MS_DEFAULT);
   }
 }

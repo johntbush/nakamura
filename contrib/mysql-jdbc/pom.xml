@@ -5,14 +5,12 @@
 	<parent>
 		<groupId>org.sakaiproject.nakamura</groupId>
 		<artifactId>base</artifactId>
-		<version>1.0.2</version>
-		<relativePath>../../pom.xml</relativePath>
+		<version>1.1</version>
 	</parent>
 	<groupId>org.sakaiproject.nakamura</groupId>
 	<artifactId>org.sakaiproject.nakamura.mysqljdbc</artifactId>
-	<version>1.0.2</version>
 	<packaging>bundle</packaging>
-	<name>Sakai Nakamura :: MySQL JDBC Bundle</name>
+	<name>mysql jdbc bundle</name>
 	<description>
         This bundle simply wraps mysql-connector-java.jar.
     </description>

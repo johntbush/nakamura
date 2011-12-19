@@ -51,7 +51,7 @@ import javax.servlet.ServletException;
  *
  */
 
-@ServiceDocumentation(name = "Form Login Servlet", okForVersion = "0.11",
+@ServiceDocumentation(name = "Form Login Servlet", okForVersion = "1.1",
     shortDescription = "Provides an endpoint to login against.",
     description = {
       " In combination with the FormAuthenticationHandler that is bound to the Sling/OSGi handleSecurity Mechanism a POST to "
@@ -94,7 +94,7 @@ public class FormLoginServlet extends SlingAllMethodsServlet {
    *
    */
   private static final long serialVersionUID = -6303432993222973296L;
-  private static final String PARAM_DESTINATION = "d";
+  private static final String PARAM_DESTINATION = "url";
   public static final String TRY_LOGIN = "sakaiauth:login";
   public static final String USERNAME = "sakaiauth:un";
   public static final String PASSWORD = "sakaiauth:pw";

@@ -1,13 +1,18 @@
 {
-  "sakai:query-template": "taguuid:[* TO *]",
+  "sakai:query-template": "tag:[* TO *]${_groupReaderAnd}",
   "sakai:query-template-options": {
-      "sort": "${sortOn} ${sortOrder}",
-      "items": "10000"
+      "items": "0",
+      "facet": true,
+      "facet.field": "tagname",
+      "facet.mincount": 1
   },
-  "sortOn": "_lastModified",
-  "sortOrder": "desc",
+  "sakai:query-template-defaults": {
+    "sortOn": "_lastModified",
+    "sortOrder": "desc",
+    "_groupReaderAnd": ""
+  },
   "sling:resourceType": "sakai/solr-search",
-  "sakai:batchresultprocessor": "TagCloud",
+  "sakai:propertyprovider": "GroupReader",
   "sakai:title": "Tag Cloud",
   "sakai:shortDescription": "Returns the most-used tags with the counts of their usage.",
   "sakai:description": "Searches the entire repository for things which have been tagged and returns the most popular tags.",

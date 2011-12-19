@@ -21,16 +21,21 @@ import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
 
-import java.net.MalformedURLException;
 import java.util.Hashtable;
 import java.util.Iterator;
+
+import java.io.UnsupportedEncodingException;
+
+import java.net.URISyntaxException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URLDecoder;
 
 /**
  * Class used to hold information about a request. eg: type, parameters, url..
  */
 public class RequestInfo {
 
-  private static final String ALLOWED_URL_CHARS = "$-_.+!*'(),/?&:;=@% ~^";
   private String url;
   private String method;
   private Hashtable<String, String[]> parameters;
@@ -74,10 +79,24 @@ public class RequestInfo {
    *           The JSON object could not be interpreted correctly.
    * @throws MalformedURLException
    */
-  public RequestInfo(JSONObject obj) throws JSONException, MalformedURLException {
+  public RequestInfo(JSONObject obj) throws JSONException, MalformedURLException, UnsupportedEncodingException, URISyntaxException {
     setUrl(obj.getString("url"));
     setMethod(obj.getString("method"));
     setParameters(new Hashtable<String, String[]>());
+
+    String queryString = new URI(getUrl()).getRawQuery();
+    if (queryString != null) {
+      // KERN-2095: If the URL we've been handed has query parameters, use them.
+      // Note that parameters provided in the "parameters" block will override
+      // these if both are present.
+      for (String pair : queryString.split("&")) {
+        String[] param = pair.split("=", 2);
+        if (param.length == 2) {
+          getParameters().put(URLDecoder.decode(param[0], "UTF-8"),
+                              new String[] { URLDecoder.decode(param[1], "UTF-8") });
+        }
+      }
+    }
 
     if (obj.has("parameters")) {
 
@@ -110,18 +129,10 @@ public class RequestInfo {
    * @throws MalformedURLException
    */
   public void setUrl(String url) throws MalformedURLException {
-    checkValidUrl(url);
+    if (!StringUtils.containsOnlySafeChars(url)) {
+      throw new MalformedURLException("Invalid Character in URL request "+url);
+    };
     this.url = url;
-  }
-
-  private void checkValidUrl(String url) throws MalformedURLException {
-    for( char c : url.toCharArray()) {
-      if ( !Character.isLetterOrDigit(c)) {
-        if ( ALLOWED_URL_CHARS.indexOf(c) < 0 ) {
-          throw new MalformedURLException("Invalid Character in URL request "+url+" character was 0x"+Integer.toHexString(c));
-        }
-      }
-    }
   }
 
   /**

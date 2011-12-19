@@ -72,7 +72,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet endpoint for comments associated to a piece of pooled content.
  */
 @SlingServlet(methods = { "GET", "POST", "DELETE" }, extensions = "comments", resourceTypes = { "sakai/pooled-content" })
-@ServiceDocumentation(name = "ContentPoolCommentServlet", okForVersion = "0.11", shortDescription = "Read/Write/Delete comments on a content item.",
+@ServiceDocumentation(name = "ContentPoolCommentServlet", okForVersion = "1.1", shortDescription = "Read/Write/Delete comments on a content item.",
     description = "Read, write, and delete comments associated to a piece of pooled content.",
     bindings = @ServiceBinding(type = BindingType.TYPE, bindings = "sakai/pooled-content",
                 extensions = @ServiceExtension(name = "comments", description = "Accesses the comments on a piece of content.")),
@@ -175,7 +175,10 @@ public class ContentPoolCommentServlet extends SlingAllMethodsServlet implements
             Authorizable author = authorizableManager.findAuthorizable(authorId);
             ValueMap profile = new ValueMapDecorator(basicUserInfoService.getProperties(author));
             w.valueMapInternals(profile);
-          } catch (StorageClientException e ) {
+          } catch (StorageClientException e) {
+            w.key(AUTHOR);
+            w.value(authorId);
+          } catch (AccessDeniedException e) {
             w.key(AUTHOR);
             w.value(authorId);
           }
@@ -210,9 +213,10 @@ public class ContentPoolCommentServlet extends SlingAllMethodsServlet implements
   @Override
   protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
       throws ServletException, IOException {
-    // collect the items we'll store
+
     String user = request.getRemoteUser();
     String body = request.getParameter(COMMENT);
+    int statusCode;
 
     // stop now if user is not logged in
     if ("anonymous".equals(user)) {
@@ -221,20 +225,16 @@ public class ContentPoolCommentServlet extends SlingAllMethodsServlet implements
       return;
     }
 
-    // stop now if no comment provided
-    if (StringUtils.isBlank(body)) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-          "'comment' must be provided.");
-      return;
-    }
 
     Resource resource = request.getResource();
     Session adminSession = null;
     try {
       adminSession = repository.loginAdministrative();
       ContentManager contentManager = adminSession.getContentManager();
-      Content node = resource.adaptTo(Content.class);
-      String path = node.getPath() + "/" + COMMENTS;
+      AuthorizableManager authorizableManager = adminSession.getAuthorizableManager();
+      User currentUser = (User) authorizableManager.findAuthorizable(user);
+      Content poolContent = resource.adaptTo(Content.class);
+      String path = poolContent.getPath() + "/" + COMMENTS;
 
       Content comments = contentManager.get(path);
       if (comments == null) {
@@ -242,24 +242,64 @@ public class ContentPoolCommentServlet extends SlingAllMethodsServlet implements
         contentManager.update(comments);
       }
 
-      // have the node name be the number of the comments there are
-      Calendar cal = Calendar.getInstance();
-      String newNodeName = Long.toString(cal.getTimeInMillis());
-      String newNodePath = path + "/" + newNodeName;
-      Content newComment = new Content(newNodePath, ImmutableMap.of(AUTHOR,
-          (Object)user, COMMENT,
-          body));
+      String commentId = request.getParameter("commentId");
+      if (commentId != null) {
+        // we're going to edit an existing comment
+        Content existingComment = contentManager.get(commentId);
+        if (existingComment == null) {
+          response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+          "Attempting to update non-existent content: " + commentId);
+          return;
+        }
+        if (!isManager(poolContent, currentUser, authorizableManager)
+          && !currentUser.getId().equals(existingComment.getProperty("author"))) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN,
+            "Must be a manager of the pooled content item or author of the comment to edit a comment.");
+        return;
+      }
+        path = commentId;
+        statusCode = HttpServletResponse.SC_OK;
+      } else {
+        // stop now if no comment provided
+        if (StringUtils.isBlank(body)) {
+          response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+            "'comment' must be provided.");
+          return;
+        }
+        // have the node name be the current time in milliseconds since the epoch
+        Calendar cal = Calendar.getInstance();
+        String newNodeName = Long.toString(cal.getTimeInMillis());
+        path = path + "/" + newNodeName;
+        statusCode = HttpServletResponse.SC_CREATED;
+      }
+      ImmutableMap.Builder<String,Object> commentPropertiesBuilder = ImmutableMap.builder();
+      commentPropertiesBuilder.put(AUTHOR, user);
+      // KERN-1536 allow arbitrary properties to be stored on a comment
+      for (String parameterName : request.getRequestParameterMap().keySet()) {
+        // commentId is not meant to be stored
+        if ("commentId" == parameterName) {
+          continue;
+        }
+        String[] parameterValues = request.getParameterValues(parameterName);
+        if (parameterValues.length == 1) {
+          commentPropertiesBuilder.put(parameterName, parameterValues[0]);
+        } else {
+          commentPropertiesBuilder.put(parameterName, parameterValues);
+        }
+      }
 
-      contentManager.update(newComment);
+      Content comment = new Content(path, commentPropertiesBuilder.build());
 
-      response.setStatus(HttpServletResponse.SC_CREATED);
+      contentManager.update(comment);
+
+      response.setStatus(statusCode);
       // return the comment id created for this comment
       response.setContentType("text/plain");
       response.setCharacterEncoding("UTF-8");
       ExtendedJSONWriter w = new ExtendedJSONWriter(response.getWriter());
       w.object();
       w.key(COMMENT_ID);
-      w.value(newNodePath);
+      w.value(path);
       w.endObject();
     } catch (JSONException e) {
       LOGGER.warn(e.getMessage(), e);
