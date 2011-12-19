@@ -623,17 +623,11 @@ KERN-1187
       <artifactId>org.sakaiproject.nakamura.activity</artifactId>
       <version>1.1</version>
     </bundle>
-    <!-- version number changed to reflect partial merge with sakaiproject
-	 this version number can be clobbered when the nexts sakaiproject
-         merge brings the files modules fully up to date -->
     <bundle>
       <groupId>org.sakaiproject.nakamura</groupId>
       <artifactId>org.sakaiproject.nakamura.files.api</artifactId>
-      <version>1.0.2.rSmart</version>
+      <version>1.1</version>
     </bundle>
-    <!-- version number changed to reflect partial merge with sakaiproject
-	 this version number can be clobbered when the nexts sakaiproject
-         merge brings the files modules fully up to date -->
     <bundle>
       <groupId>org.sakaiproject.nakamura</groupId>
       <artifactId>org.sakaiproject.nakamura.files.api</artifactId>
