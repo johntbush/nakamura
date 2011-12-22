@@ -682,10 +682,12 @@ KERN-1187
       <artifactId>com.rsmart.nakamura.registration</artifactId>
       <version>1.0.2-M5</version>
     </bundle>
+<!-- Commented out for OIPP for ACAD-489
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>acceptterms</artifactId>
       <version>1.0.2-M5</version>
     </bundle>
+-->
    </startLevel>
 </bundles>
