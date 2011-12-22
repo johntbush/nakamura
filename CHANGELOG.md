@@ -1,6 +1,14 @@
 rSmart Nakamura Changelog
 =========================
 
+oipp-acad-1.0.2-M5.1-20111222
+-----------------------------
+* ACAD-489 commented acceptterms widget out of the deployment list 151383a
+
+oipp-acad-1.0.2-M5-20111216
+---------------------------
+* no changes
+
 acad-1.0.2-M5-20111215
 ----------------------
 * No changes
