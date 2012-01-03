@@ -68,7 +68,7 @@ import javax.servlet.http.HttpServletResponse;
  * Provides a listing for the members and managers of this group.
  */
 @ServiceDocumentation(
-  name = "Group Member Servlet", okForVersion = "0.11",
+  name = "Group Member Servlet", okForVersion = "1.1",
   shortDescription = "Provides a listing for the members and managers of this group.",
   description = "Provides a listing for the members and managers of this group.",
   bindings = {
@@ -259,9 +259,16 @@ public class LiteGroupMemberServlet extends SlingSafeMethodsServlet {
     String[] members = group.getMembers();
     List<String> managers = Arrays.asList(StorageClientUtils.nonNullStringArray((String[]) group.getProperty(UserConstants.PROP_GROUP_MANAGERS)));
     for ( String memberName : members) {
-      Authorizable member = authorizableManager.findAuthorizable(memberName);
+      Authorizable member = null;
+      try {
+        member = authorizableManager.findAuthorizable(memberName);
+      } catch (AccessDeniedException e) {
+        // this means a group has a member we're not allowed to see
+        // that's normal, and we'll just skip over it. (KERN-2302)
+        continue;
+      }
       // filter this out if it is a manager member
-      if (!managers.contains(memberName)) {
+      if (member != null && !managers.contains(memberName)) {
         String name = getName(member);
         map.put(name, member);
       }
@@ -299,8 +306,15 @@ public class LiteGroupMemberServlet extends SlingSafeMethodsServlet {
     String[] members = group.getMembers();
     List<String> managers = Arrays.asList(StorageClientUtils.nonNullStringArray((String[]) group.getProperty(UserConstants.PROP_GROUP_MANAGERS)));
     for  (String memberName : members) {
-      Authorizable mau = authorizableManager.findAuthorizable(memberName);
-      if (managers.contains(memberName)) {
+      Authorizable mau = null;
+      try {
+        mau = authorizableManager.findAuthorizable(memberName);
+      } catch (AccessDeniedException e) {
+        // this means a group has a member we're not allowed to see
+        // that's normal, and we'll just skip over it. (KERN-2302)
+        continue;
+      }
+      if (mau != null && managers.contains(memberName)) {
         String name = getName(mau);
         map.put(name, mau);
       }

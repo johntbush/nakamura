@@ -30,12 +30,12 @@ import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
+import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.tika.exception.TikaException;
 import org.osgi.service.event.Event;
 import org.sakaiproject.nakamura.api.files.FilesConstants;
-import org.sakaiproject.nakamura.api.lite.ClientPoolException;
 import org.sakaiproject.nakamura.api.lite.Session;
 import org.sakaiproject.nakamura.api.lite.StorageClientException;
 import org.sakaiproject.nakamura.api.lite.accesscontrol.AccessControlManager;
@@ -46,6 +46,7 @@ import org.sakaiproject.nakamura.api.lite.content.Content;
 import org.sakaiproject.nakamura.api.lite.content.ContentManager;
 import org.sakaiproject.nakamura.api.lite.util.Iterables;
 import org.sakaiproject.nakamura.api.solr.IndexingHandler;
+import org.sakaiproject.nakamura.api.solr.QoSIndexHandler;
 import org.sakaiproject.nakamura.api.solr.RepositorySession;
 import org.sakaiproject.nakamura.api.solr.ResourceIndexingService;
 import org.sakaiproject.nakamura.api.tika.TikaService;
@@ -66,11 +67,11 @@ import java.util.Set;
  * Indexes content with the property sling:resourceType = "sakai/pooled-content".
  */
 @Component(immediate = true)
-public class PoolContentResourceTypeHandler implements IndexingHandler {
+public class PoolContentResourceTypeHandler implements IndexingHandler, QoSIndexHandler {
 
   private static final Set<String> IGNORE_NAMESPACES = ImmutableSet.of("jcr", "rep");
   private static final Set<String> IGNORE_PROPERTIES = ImmutableSet.of();
-  private static final Map<String, String> INDEX_FIELD_MAP = getFieldMap();
+  private static final Map<String, Object> INDEX_FIELD_MAP = getFieldMap();
 
   private static final Logger LOGGER = LoggerFactory
       .getLogger(PoolContentResourceTypeHandler.class);
@@ -83,16 +84,15 @@ public class PoolContentResourceTypeHandler implements IndexingHandler {
   @Reference
   private TikaService tika;
 
-  private static Map<String, String> getFieldMap() {
-    Builder<String, String> builder = ImmutableMap.builder();
+  private static Map<String, Object> getFieldMap() {
+    Builder<String, Object> builder = ImmutableMap.builder();
     builder.put(FilesConstants.POOLED_CONTENT_USER_MANAGER, "manager");
     builder.put(FilesConstants.POOLED_CONTENT_USER_VIEWER, "viewer");
-    builder.put(FilesConstants.POOLED_CONTENT_FILENAME, "filename");
+    builder.put(FilesConstants.POOLED_CONTENT_FILENAME, new String[] { "filename", "general_sort" });
     builder.put(FilesConstants.POOLED_NEEDS_PROCESSING, "needsprocessing");
     builder.put(FilesConstants.POOLED_CONTENT_MIMETYPE, "mimeType");
     builder.put(FilesConstants.SAKAI_FILE, "file");
     builder.put(FilesConstants.SAKAI_TAG_NAME, "tagname");
-    builder.put(FilesConstants.SAKAI_TAG_UUIDS, "taguuid");
     builder.put(FilesConstants.SAKAI_TAGS, "tag");
     builder.put(FilesConstants.SAKAI_PAGE_COUNT, "pagecount");
     builder.put(FilesConstants.LAST_MODIFIED, FilesConstants.LAST_MODIFIED);
@@ -103,6 +103,7 @@ public class PoolContentResourceTypeHandler implements IndexingHandler {
     builder.put(FilesConstants.SAKAI_DESCRIPTION, "description");
     builder.put(FilesConstants.POOLED_CONTENT_COMMENT, "comment");
     builder.put(FilesConstants.POOLED_CONTENT_HAS_PREVIEW, "hasPreview");
+    builder.put(FilesConstants.POOLED_CONTENT_SHOW_ALWAYS, "showalways");
     return builder.build();
   }
 
@@ -120,6 +121,17 @@ public class PoolContentResourceTypeHandler implements IndexingHandler {
     for (String type : CONTENT_TYPES) {
       resourceIndexingService.removeHandler(type, this);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see org.sakaiproject.nakamura.api.solr.QoSIndexHandler#getTtl(org.osgi.service.event.Event)
+   */
+  public int getTtl(Event event) {
+    // have to be > 0 based on the logic in ContentEventListener.
+    // see org.sakaiproject.nakamura.solr.Utils.defaultMax(int)
+    return 50;
   }
 
   // ---------- IndexingHandler interface --------------------------------------
@@ -150,6 +162,10 @@ public class PoolContentResourceTypeHandler implements IndexingHandler {
           if (!CONTENT_TYPES.contains(content.getProperty("sling:resourceType"))) {
             return documents;
           }
+          // KERN-2347 check if the content is marked to be excluded from searches
+          if (Boolean.parseBoolean(String.valueOf(content.getProperty("sakai:excludeSearch")))) {
+            return documents;
+          }
 
           SolrInputDocument doc = new SolrInputDocument();
 
@@ -164,14 +180,15 @@ public class PoolContentResourceTypeHandler implements IndexingHandler {
                     path, event);
           } else {
             for (Entry<String, Object> p : properties.entrySet()) {
-              String indexName = index(p);
-              if (indexName != null) {
-                for (Object o : convertToIndex(p)) {
-                  doc.addField(indexName, o);
+              String[] indexNames = index(p);
+              if (indexNames != null) {
+                for (String indexName: indexNames) {
+                  for (Object o : convertToIndex(p)) {
+                    doc.addField(indexName, o);
+                  }
                 }
               }
             }
-            
             if (isPageContent) {
               long startIndexing = System.currentTimeMillis();
               PageIndexingUtil.indexAllPages(content, contentManager, doc, tika);
@@ -195,8 +212,6 @@ public class PoolContentResourceTypeHandler implements IndexingHandler {
             documents.add(doc);
           }
         }
-      } catch (ClientPoolException e) {
-        LOGGER.warn(e.getMessage(), e);
       } catch (StorageClientException e) {
         LOGGER.warn(e.getMessage(), e);
       } catch (AccessDeniedException e) {
@@ -293,7 +308,7 @@ public class PoolContentResourceTypeHandler implements IndexingHandler {
    * @return The name of the index to use for the given entry. null if the entry should
    *         not be indexed.
    */
-  protected String index(Entry<String, Object> e) {
+  protected String[] index(Entry<String, Object> e) {
     String name = e.getKey();
     if (!INDEX_FIELD_MAP.containsKey(name)) {
       String[] parts = StringUtils.split(name, ':');
@@ -304,7 +319,7 @@ public class PoolContentResourceTypeHandler implements IndexingHandler {
         return null;
       }
     }
-    String mappedName = INDEX_FIELD_MAP.get(name);
+    String[] mappedName = PropertiesUtil.toStringArray(INDEX_FIELD_MAP.get(name));
     // only fields in the map will be used, and those are in the schema.
     return mappedName;
   }

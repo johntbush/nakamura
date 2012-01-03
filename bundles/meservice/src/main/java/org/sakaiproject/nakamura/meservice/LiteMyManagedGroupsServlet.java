@@ -57,7 +57,7 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 @ServiceDocumentation(
-  name = "My Managed Groups Servlet", okForVersion = "0.11",
+  name = "My Managed Groups Servlet", okForVersion = "1.1",
   shortDescription = "Gets the groups where the current user is a manager",
   description = "Gets the groups where the current user is a manager",
   bindings = {
@@ -143,7 +143,7 @@ public class LiteMyManagedGroupsServlet extends LiteAbstractMyGroupsServlet {
         if (isPseudoGroup(group) && isManagerGroup(group, userManager)) {
           // The group we want is the child of the pseudo group
           isManager = true;
-          group = (Group)userManager.findAuthorizable((String) group.getProperty(UserConstants.PROP_PSEUDO_GROUP_PARENT));
+          group = (Group)userManager.findAuthorizable((String) group.getProperty(UserConstants.PROP_PARENT_GROUP_ID));
         } else {
           for(String managerId : StorageClientUtils.nonNullStringArray(
             (String[]) group.getProperty(UserConstants.PROP_GROUP_MANAGERS))) {

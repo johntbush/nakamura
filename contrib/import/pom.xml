@@ -19,11 +19,10 @@
 	<parent>
 		<groupId>org.sakaiproject.nakamura</groupId>
 		<artifactId>base</artifactId>
-		<version>1.0.2</version>
+		<version>1.1</version>
 	</parent>
 	<artifactId>org.sakaiproject.nakamura.import</artifactId>
 	<packaging>bundle</packaging>
-	<version>1.0.2</version>
 	<name>Sakai Nakamura :: Sakai Import Bundle</name>
 	<description>Sakai import bundle</description>
 	<build>
@@ -58,10 +57,12 @@
 	<dependencies>
 		<!--  sling and JCR -->
 		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.scr.annotations</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-jcr-commons</artifactId>
-			<version>2.0.0</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 		  <groupId>javax.jcr</groupId>
@@ -70,35 +71,27 @@
 		<dependency>
 		  <groupId>org.apache.sling</groupId>
 		  <artifactId>org.apache.sling.jcr.api</artifactId>
-		  <version>2.1.0</version>
 		</dependency>
-    <!-- version number changed to reflect partial merge with sakaiproject
-         this version number can be clobbered when the nexts sakaiproject
-         merge brings the files modules fully up to date -->
 		<dependency>
 			<groupId>org.sakaiproject.nakamura</groupId>
-			<artifactId>org.sakaiproject.nakamura.files.api</artifactId>
-			<version>1.0.2.rSmart</version>
+			<artifactId>org.sakaiproject.nakamura.files</artifactId>
+			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.sakaiproject.nakamura</groupId>
 			<artifactId>org.sakaiproject.nakamura.cluster</artifactId>
-			<version>1.0.2</version>
+			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.sling</groupId>
 			<artifactId>org.apache.sling.api</artifactId>
-			<version>2.1.0</version>
-			<scope>provided</scope>
 		</dependency>
 		<!-- servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
 		</dependency>
 		<!-- logging -->
 		<dependency>
@@ -108,14 +101,16 @@
 		<!--  -->
 		<dependency>
 			<groupId>org.sakaiproject.nakamura</groupId>
+			<artifactId>org.sakaiproject.nakamura.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.sakaiproject.nakamura</groupId>
 			<artifactId>org.sakaiproject.nakamura.doc</artifactId>
-			<version>1.0.2</version>
+			<version>1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.4</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.woodstox</groupId>
@@ -138,13 +133,12 @@
 		<dependency>
 			<groupId>org.sakaiproject.nakamura</groupId>
 			<artifactId>org.sakaiproject.nakamura.testutils</artifactId>
-			<version>1.0.2</version>
+			<version>1.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.sling</groupId>
 			<artifactId>org.apache.sling.commons.testing</artifactId>
-			<version>2.0.4-incubator</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

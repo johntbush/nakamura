@@ -55,10 +55,14 @@ public class PageIndexingUtil {
   private static List<InputStream> getPageStreams(Content content, ContentManager contentManager) throws PageIndexException {
     List<InputStream> streams = Lists.newArrayList();
     for (Content page : getPages(content, contentManager)) {
-      try {
-        streams.add(new ByteArrayInputStream(((String) page.getProperty("page")).getBytes("UTF-8")));
-      } catch (UnsupportedEncodingException e) {
-        throw new PageIndexException("Could not get bytes from the page property because UTF-8 is an unsupported encoding.");
+      if (page.hasProperty("page")) {
+        try {
+          // The UX posts a string, but it may have been silently stored as a LongString value.
+          String pageProperty = page.getProperty("page").toString();
+          streams.add(new ByteArrayInputStream(pageProperty.getBytes("UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+          throw new PageIndexException("Could not get bytes from the page property because UTF-8 is an unsupported encoding.");
+        }
       }
     }
     return streams;
@@ -68,7 +72,12 @@ public class PageIndexingUtil {
     List<Content> pages = Lists.newArrayList();
     try {
       for (String pagePath : getPagePaths(content)) {
-        pages.add(contentManager.get(pagePath));
+        Content page = contentManager.get(pagePath);
+        if (page != null) {
+          pages.add(page);
+        } else {
+          LOGGER.warn("Unable to find page {} under {}", pagePath, content.getPath());
+        }
       }
     } catch (StorageClientException e) {
       throw new PageIndexException("Unable to get the child page paths for " + content.getPath(), e);
@@ -90,8 +99,8 @@ public class PageIndexingUtil {
   private static Iterable<? extends String> getPageReferences(JSONObject pageStructure) throws PageIndexException {
     List<String> pageReferences = Lists.newArrayList();
     try {
-      for (Iterator iter = pageStructure.keys(); iter.hasNext(); ) {
-        String pageStructureKey = (String) iter.next();
+      for (Iterator<String> iter = pageStructure.keys(); iter.hasNext(); ) {
+        String pageStructureKey = iter.next();
         Object pageDescriptor = pageStructure.get(pageStructureKey);
         if (pageDescriptor instanceof JSONObject) {
           pageReferences.add(((JSONObject) pageDescriptor).getString("_ref"));
@@ -105,7 +114,7 @@ public class PageIndexingUtil {
 
   private static JSONObject getPageStructure(Content content) throws PageIndexException {
     try {
-      return new JSONObject((String) content.getProperty("structure0"));
+      return new JSONObject(content.getProperty("structure0").toString());
     } catch (JSONException e) {
       throw new PageIndexException("Could not create JSON object for the pages of document " + content.getPath(), e);
     }
