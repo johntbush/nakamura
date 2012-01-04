@@ -21,6 +21,6 @@ DEPENDENCIES
   docsplit
   getopt
   json
-  nakamura (>= 0.2)
+  nakamura (>= 0.4)
   rmagick
   term-extract
