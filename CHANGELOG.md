@@ -1,6 +1,10 @@
 rSmart Nakamura Changelog
 =========================
 
+oipp-acad-1.0.2-M5.2-20120104
+-----------------------------
+* ACAD-545 corrected lists.xml and rev'd the binary to reflect this change 29b4efa
+
 oipp-acad-1.0.2-M5.1-20111222
 -----------------------------
 * ACAD-489 commented acceptterms widget out of the deployment list 151383a
