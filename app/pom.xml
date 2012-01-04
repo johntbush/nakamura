@@ -22,7 +22,7 @@
 
     <artifactId>com.rsmart.academic.app</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2-M5.1-20111222-oipp</version>
+    <version>1.0.2-M5.2-20120104-oipp</version>
 
     <name>Sakai Nakamura :: Launchpad Standalone Java Application</name>
     <description> Standalone Launchpad Java Application. Everything needed to run the Launchpad is
