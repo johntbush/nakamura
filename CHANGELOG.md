@@ -1,17 +1,16 @@
 rSmart Nakamura Changelog
 =========================
 
-pre-acad-1.1.0-M1-20120105
+acad-1.1.0-M1-QA1-20120105
 --------------------------
+* NOJIRA amended changelog for QA tag pre-acad-1.1.0-M1-20120105 74b3f41
 * NOJIRA amended uxloader version number to match 3akai-ux commit 08c9e29ca5f6aaea863313a11cbca0dfcf5c2a3d dea048b
 * KERN-2490 KERN-2375 bump the upgrade bundle version number for these bug fixes 52a7589
 * KERN-2477: Write a migrator to convert old world data 629a8c3
 * KERN-2490 Be even more defensive in case the tag comes up empty after stripping out /tags/ f718d7e
 * KERN-2490 Deal with tags that start with / or /tags 123d43e
 * KERN-2490 Use JcrUtils.deepGetOrCreateNode so we create intermediate directories in multi-level tags 1a04664
-
-pre-acad-1.1.0-M1-010312
-------------------------
+* NOJIRA created pre-acad-1.1.0-M1-010312 tag for QA e6896ef
 * NOJIRA fixed pom.xml reference to parent pom; lack of relativePath broke build f86be89
 * ACAD-481 minor pom fixes to align to 3akai and 1.3 sparsemap 4a41135
 * [maven-release-plugin] prepare release 1.1-RC7 b5c9925
