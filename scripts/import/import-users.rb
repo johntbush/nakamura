@@ -5,7 +5,7 @@ require 'csv'
 require 'json'
 require 'nakamura'
 require 'nakamura/users'
-require 'import-base'
+require './import-base'
 include SlingInterface
 include SlingUsers
 include OaeImport
