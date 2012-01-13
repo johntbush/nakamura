@@ -30,7 +30,7 @@ module OaeImport
         
         def processServerProps(serverInfoFile)
             file = File.open(serverInfoFile, 'r')
-            json = file.readlines.to_s
+            json = file.readlines.join(" ")
             @serverProps = JSON.parse(json)
             
             serverUrl = @serverProps["serverUrl"] || "http://localhost:8080/"
@@ -113,7 +113,7 @@ module OaeImport
             
             skip = skipFirstRow()
             
-            CSV.open(csvFile, 'r') do |row|
+            CSV.foreach(csvFile) do |row|
                 if (!skip)
                   @total += 1
                   begin 
