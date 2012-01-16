@@ -49,8 +49,8 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-@SlingServlet(methods = { "GET" }, extensions = { "*" }, resourceTypes = { "sakai/pooled-content" })
-@ServiceDocumentation(name = "CanModifyContentPoolServlet documentation", okForVersion = "0.11",
+@SlingServlet(methods = { "GET" }, resourceTypes = { "sakai/pooled-content" })
+@ServiceDocumentation(name = "CanModifyContentPoolServlet documentation", okForVersion = "1.1",
   shortDescription = "Delegates to another servlet",
   description = "Delegates to another servlet",
   bindings = @ServiceBinding(type = BindingType.TYPE, bindings = "sakai/pooled-content",

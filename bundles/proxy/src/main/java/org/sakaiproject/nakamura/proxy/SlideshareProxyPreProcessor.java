@@ -22,7 +22,7 @@ import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.commons.osgi.OsgiUtil;
+import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.service.component.ComponentContext;
 import org.sakaiproject.nakamura.api.proxy.ProxyPreProcessor;
 import org.sakaiproject.nakamura.util.StringUtils;
@@ -61,6 +61,8 @@ public class SlideshareProxyPreProcessor implements ProxyPreProcessor {
       String hash = StringUtils.sha1Hash(SHAREDSECRET + ts);
       String keyHash = "api_key=" + APIKEY + "&ts=" + ts + "&hash=" + hash;
       templateParams.put("keyHash", keyHash);
+      templateParams.put("apiKey", APIKEY);
+      templateParams.put("ts", ts);
     } catch (UnsupportedEncodingException e) {
       LOGGER.error("Hashing error", e);
     } catch (NoSuchAlgorithmException e) {
@@ -76,7 +78,7 @@ public class SlideshareProxyPreProcessor implements ProxyPreProcessor {
     @SuppressWarnings("rawtypes")
     Dictionary props = context.getProperties();
 
-    String _apiKey = OsgiUtil.toString(props.get(slideshareApiKey), null);
+    String _apiKey = PropertiesUtil.toString(props.get(slideshareApiKey), null);
     if (_apiKey != null) {
       if (diff(APIKEY, _apiKey)) {
         APIKEY = _apiKey;
@@ -85,7 +87,7 @@ public class SlideshareProxyPreProcessor implements ProxyPreProcessor {
       LOGGER.error("Slideshare API key not set.");
     }
 
-    String _sharedSecret = OsgiUtil.toString(props.get(slideshareSharedSecret), null);
+    String _sharedSecret = PropertiesUtil.toString(props.get(slideshareSharedSecret), null);
     if (_sharedSecret != null) {
       if (diff(SHAREDSECRET, _sharedSecret)) {
         SHAREDSECRET = _sharedSecret;

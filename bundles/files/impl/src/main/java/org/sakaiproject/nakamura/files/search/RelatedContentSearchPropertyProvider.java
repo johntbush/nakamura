@@ -19,12 +19,14 @@ package org.sakaiproject.nakamura.files.search;
 
 import com.google.common.base.Joiner;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.sakaiproject.nakamura.api.connections.ConnectionState;
 import org.sakaiproject.nakamura.api.files.FilesConstants;
@@ -89,9 +91,9 @@ public class RelatedContentSearchPropertyProvider extends
    * The solr query options that will be used in phase one where we find source content to
    * match against.
    */
-  public static final Map<String, String> SOURCE_QUERY_OPTIONS;
+  public static final Map<String, Object> SOURCE_QUERY_OPTIONS;
   static {
-    final Map<String, String> sqo = new HashMap<String, String>(3);
+    final Map<String, Object> sqo = new HashMap<String, Object>(3);
     // sort by most recent content
     sqo.put("sort", "_lastModified desc");
     // limit source content for matching to something reasonable
@@ -134,7 +136,7 @@ public class RelatedContentSearchPropertyProvider extends
 
     final Session session = StorageClientUtils.adaptToSession(request
         .getResourceResolver().adaptTo(javax.jcr.Session.class));
-    final Set<String> managers = super.getPrincipals(session, user);
+    final Set<String> managers = super.getPrincipals(session, user, 1);
     final Set<String> viewers = new HashSet<String>(managers);
 
     final StringBuilder sourceQuery = new StringBuilder(
@@ -158,7 +160,7 @@ public class RelatedContentSearchPropertyProvider extends
         final ContentManager contentManager = session.getContentManager();
         final Iterator<Result> i = rs.getResultSetIterator();
         Set<String> allFileNames = new HashSet<String>();
-        Set<String> allTagUuids = new HashSet<String>();
+        Set<String> allTags = new HashSet<String>();
         int count = 0;
         while (i.hasNext() && count < MAX_SOURCE_LIMIT) {
           final Result result = i.next();
@@ -178,14 +180,18 @@ public class RelatedContentSearchPropertyProvider extends
                 }
               }
               final String[] foundFileNames = REGEX_PATTERN.split(fileName);
-              allFileNames.addAll(Arrays.asList(foundFileNames));
+              for (String foundFileName : foundFileNames) {
+                if (!StringUtils.isBlank(foundFileName)) {
+                  allFileNames.add(foundFileName);
+                }
+              }
             }
 
-            // grab all the unique tag uuids
-            final String[] tagUuids = (String[]) content
-                .getProperty(FilesConstants.SAKAI_TAG_UUIDS);
-            if (tagUuids != null) {
-              allTagUuids.addAll(Arrays.asList(tagUuids));
+            // grab all the unique tags
+            final String[] tags = PropertiesUtil.toStringArray(content
+                .getProperty(FilesConstants.SAKAI_TAGS));
+            if (tags != null) {
+              allTags.addAll(Arrays.asList(tags));
             }
           } else {
             // fail quietly in this edge case
@@ -231,22 +237,22 @@ public class RelatedContentSearchPropertyProvider extends
         }
         propertiesMap.put("fileNames", Joiner.on(" OR ").join(allFileNames));
 
-        if (allTagUuids.isEmpty()) { // to prevent solr parse errors
-          allTagUuids.add(AVOID_FALSE_POSITIVE_MATCHES);
+        if (allTags.isEmpty()) { // to prevent solr parse errors
+          allTags.add(AVOID_FALSE_POSITIVE_MATCHES);
         }
-        if (allTagUuids.size() > 1024) {
+        if (allTags.size() > 1024) {
           /*
            * solr allows a maximum of 1024. Performance will likely be an issue by this
            * point.
            */
           LOG.warn(
               "Exceeded maximum number of solr binary operations: {}. Reduced size to 1024.",
-              allTagUuids.size());
-          final String[] tooLarge = (String[]) allTagUuids.toArray();
+              allTags.size());
+          final String[] tooLarge = (String[]) allTags.toArray();
           final String[] justRight = Arrays.copyOf(tooLarge, 1024);
-          allTagUuids = new HashSet<String>(Arrays.asList(justRight));
+          allTags = new HashSet<String>(Arrays.asList(justRight));
         }
-        propertiesMap.put("tagUuids", Joiner.on(" OR ").join(allTagUuids));
+        propertiesMap.put("tags", Joiner.on(" OR ").join(allTags));
 
       } catch (AccessDeniedException e) {
         LOG.error(e.getLocalizedMessage(), e);

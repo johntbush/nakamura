@@ -38,7 +38,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.commons.osgi.OsgiUtil;
+import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -206,13 +206,12 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
     @SuppressWarnings("unchecked")
 
     Dictionary<String, Object> properties = componentContext.getProperties();
-    disableProtectionForDevMode = OsgiUtil.toBoolean(
-        properties.get(DISABLE_XSS_PROTECTION_FOR_UI_DEV), false);
+    disableProtectionForDevMode = PropertiesUtil.toBoolean(properties.get(DISABLE_XSS_PROTECTION_FOR_UI_DEV), false);
     if ( disableProtectionForDevMode ) {
       LOGGER.warn("XSS Protection is disabled");
       return;
     }
-    String[] trustedHosts = OsgiUtil.toStringArray(
+    String[] trustedHosts = PropertiesUtil.toStringArray(
         properties.get(TRUSTED_HOSTS_CONF), DEFAULT_TRUSTED_HOSTS);
 		Builder<String, String> redirects = ImmutableMap.builder();
 		Builder<String, String> referrers = ImmutableMap.builder();
@@ -276,15 +275,15 @@ public class ServerProtectionServiceImpl implements ServerProtectionService {
 		}
 		applicationContentRedirects = redirects.build();
 		applicationReferrerHeaders = referrers.build();
-    safeToStreamPaths = OsgiUtil.toStringArray(properties.get(TRUSTED_PATHS_CONF),
+    safeToStreamPaths = PropertiesUtil.toStringArray(properties.get(TRUSTED_PATHS_CONF),
         DEFAULT_TRUSTED_PATHS);
-    safeToStreamExactPaths = ImmutableSet.of(OsgiUtil.toStringArray(
+    safeToStreamExactPaths = ImmutableSet.copyOf(PropertiesUtil.toStringArray(
         properties.get(TRUSTED_EXACT_PATHS_CONF), DEFAULT_TRUSTED_EXACT_PATHS));
-    postWhiteList = OsgiUtil.toStringArray(
+    postWhiteList = PropertiesUtil.toStringArray(
         properties.get(WHITELIST_POST_PATHS_CONF), DEFAULT_WHITELIST_POST_PATHS);
-    safeForAnonToPostPaths = OsgiUtil.toStringArray(
+    safeForAnonToPostPaths = PropertiesUtil.toStringArray(
         properties.get(ANON_WHITELIST_POST_PATHS_CONF), DEFAULT_ANON_WHITELIST_POST_PATHS);
-    String transferSharedSecret = OsgiUtil.toString(properties.get(TRUSTED_SECRET_CONF),
+    String transferSharedSecret = PropertiesUtil.toString(properties.get(TRUSTED_SECRET_CONF),
         DEFAULT_TRUSTED_SECRET_VALUE);
     if (DEFAULT_TRUSTED_SECRET_VALUE.equals(transferSharedSecret)) {
       LOGGER.error("Configuration Error =============================");
