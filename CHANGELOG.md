@@ -1,6 +1,10 @@
 rSmart Nakamura Changelog
 =========================
 
+oipp-acad-1.0.2-M5.2-20120117
+-----------------------------
+* no change
+
 oipp-acad-1.0.2-M5.2-20120104
 -----------------------------
 * ACAD-545 corrected lists.xml and rev'd the binary to reflect this change 29b4efa
