@@ -737,17 +737,17 @@ KERN-1187
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>hubspot-rest</artifactId>
-      <version>1.1.0-M1-20120116</version>
+      <version>1.1.0-M1-20120124</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>com.rsmart.nakamura.registration</artifactId>
-      <version>1.1.0-M1-20120116</version>
+      <version>1.1.0-M1-20120124</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
       <artifactId>acceptterms</artifactId>
-      <version>1.1.0-M1-20120116</version>
+      <version>1.1.0-M1-20120124</version>
     </bundle>
    </startLevel>
 </bundles>
