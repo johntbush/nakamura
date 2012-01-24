@@ -1,7 +1,17 @@
 rSmart Nakamura Changelog
 =========================
 
-release/acad-1.1.0-M1-20120116
+acad-1.1.0-M1-20120124
+----------------------
+* NOJIRA release/acad-1.1.0-M1-20120124 d8e2f6a
+* ACAD-623 changed groupId for new rSmart solr bundle dep Evaluate Ray Davis Stopgap for Reindexing Errors 4792f9e
+* ACAD-623 Changed dependency to refer to Solr 1.3.1, which fixes reindex rollback issue 089c4dd
+* NOJIRA rev'd mysql driver version (no other change) a6c4fd7
+* Revert "NOJIRA changed base pom version back to 1.1 per Duffy" 50e2dcb
+* NOJIRA changed base pom version back to 1.1 per Duffy 11d2b16
+* ACAD-628 Merge in sparse 1.3 with sparse index fix for OIPP 97fb124
+
+acad-1.1.0-M1-20120116
 ------------------------------
 * NOJIRA release/acad-1.1.0-M1-20120116 60f95a9
 * ACAD-100 Fix the slideshare API integration 624286d
