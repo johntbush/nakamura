@@ -1,6 +1,10 @@
 rSmart Nakamura Changelog
 =========================
 
+oipp-acad-1.0.2-M5.3-20120123
+-----------------------------
+* NOJIRA rev'd binary version number to a SNAPSHOT version 41f9afc
+
 oipp-acad-1.0.2-M5.2-20120117
 -----------------------------
 * no change
