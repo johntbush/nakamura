@@ -27,3 +27,6 @@ aceroni,Ceroni,Aiden,noone23@rsmart.com,password,registered,aceroni,val1,val2
 achampagne,Champagne,Alejandro,noone24@rsmart.com,password,registered,achampagne,val1,val2
 adias,Dias,Alex,noone25@rsmart.com,password,registered,adias,val1,val2
 adixon,Dixon,Amber,noone26@rsmart.com,password,registered,adixon,val1,val2
+test1@rsmart.com,"User1","Test","test1@rsmart.com","pwd","registered","","test1@rsmart.com",val
+test2@rsmart.com,User2,Test,test2@rsmart.com,pwd,registered,,test2@rsmart.com,val
+"test3@rsmart.com","User1","Test","test3@rsmart.com","pwd","registered","","test3@rsmart.com",val
