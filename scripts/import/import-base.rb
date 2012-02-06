@@ -142,7 +142,9 @@ module OaeImport
 
         def trimRow(row)
           row.each do |col|
-            col.strip!
+            if (!col.nil? && col.class == String)
+              col.strip!
+            end
           end
         end
 
