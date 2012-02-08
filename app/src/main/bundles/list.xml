@@ -736,33 +736,33 @@ KERN-1187
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
-      <artifactId>hubspot-rest</artifactId>
-      <version>1.1.0-M1-20120130</version>
+      <artifactId>com.rsmart.nakamura.extensions.hubspot-rest</artifactId>
+      <version>1.1</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
-      <artifactId>email-verify</artifactId>
-      <version>0.1</version>
+      <artifactId>com.rsmart.nakamura.extensions.email-verify</artifactId>
+      <version>1.1</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
-      <artifactId>lost-pwd</artifactId>
-      <version>0.1</version>
+      <artifactId>com.rsmart.nakamura.extensions.lost-pwd</artifactId>
+      <version>1.1</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
-      <artifactId>upgrades</artifactId>
-      <version>0.1</version>
+      <artifactId>com.rsmart.nakamura.extensions.upgrades</artifactId>
+      <version>1.1</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
-      <artifactId>com.rsmart.nakamura.registration</artifactId>
-      <version>1.1.0-M1-20120130</version>
+      <artifactId>com.rsmart.nakamura.extensions.registration</artifactId>
+      <version>1.1</version>
     </bundle>
     <bundle>
       <groupId>com.rsmart</groupId>
-      <artifactId>acceptterms</artifactId>
-      <version>1.1.0-M1-20120130</version>
+      <artifactId>com.rsmart.nakamura.extensions.acceptterms</artifactId>
+      <version>1.1</version>
     </bundle>
    </startLevel>
 </bundles>
