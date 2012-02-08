@@ -19,7 +19,7 @@
       <version>1.1</version>
     </parent>
 
-    <artifactId>com.rsmart.academic.app</artifactId>
+    <artifactId>org.sakaiproject.nakamura.app</artifactId>
     <version>1.1.0-M1-20120130</version>
     <packaging>jar</packaging>
 
