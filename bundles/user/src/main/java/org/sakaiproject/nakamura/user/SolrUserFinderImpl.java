@@ -120,18 +120,13 @@ public class SolrUserFinderImpl implements UserFinder {
   }
 
   public boolean userWithEmailExists(String email) throws Exception {
-    Session session = repository.login();
+    Set<String> emailUsers = findUsersByEmail(email);
+    Set<String> newEmailUsers = findUsersByField("newemail", email);
     
-    AuthorizableManager authm = session.getAuthorizableManager();
-    
-    Iterator<Authorizable> emailUser = authm.findAuthorizable("email", email, User.class);
-
-    Iterator<Authorizable> newEmailUser = authm.findAuthorizable("newemail", email, User.class);
-    
-    if (emailUser.hasNext() || newEmailUser.hasNext()) {
-      return true;
-    } else {
+    if (emailUsers.isEmpty() && newEmailUsers.isEmpty()) {
       return false;
+    } else {
+      return true;
     }
   }
 
