@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-
+require 'rubygems'
+require 'bundler'
+Bundler.setup(:default)
 require 'nakamura/test'
 require 'nakamura/file'
 require 'nakamura/users'
@@ -13,7 +15,7 @@ class TC_Kern2027Test < Test::Unit::TestCase
     # create test users
     u1 = create_test_user('2027-1')
     u2 = create_test_user('2027-2')
-    @s.switch_user(u1)
+    @s.switch_user(User.admin_user())
 
     # have user1 create a group
     m = uniqueness()

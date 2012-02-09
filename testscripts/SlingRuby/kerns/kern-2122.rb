@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+require 'rubygems'
+require 'bundler'
+Bundler.setup(:default)
 require 'nakamura/test'
 require 'nakamura/file'
 require 'nakamura/users'
@@ -54,8 +57,10 @@ class TC_Kern2122 < Test::Unit::TestCase
     viewers = json["viewers"]
     assert_equal(3, viewers.length, "should be 3 viewers added by viewer1" )
 
-    # now have viewer1 try to remove viewer2
-    remove_viewer2_res = @fm.manage_members(file_id, nil, [viewer2.name], nil, nil)
+    # now have viewer2 try to remove viewer1
+    @s.switch_user(viewer2)
+    remove_viewer1_res = @fm.manage_members(file_id, nil, [viewer1.name], nil, nil)
+    assert_equal('403', remove_viewer1_res.code)
     members_res = @fm.get_members file_id
     json = JSON.parse(members_res.body)
     assert_equal("200",members_res.code)
@@ -64,6 +69,7 @@ class TC_Kern2122 < Test::Unit::TestCase
 
     # now have viewer1 remove managed group
     # this is how to remove an item from the library of a group managed by a user
+    @s.switch_user(viewer1)
     remove_group_res = @fm.manage_members(file_id, nil, [managed_group.name], nil, nil)
     assert_equal("200",remove_group_res.code, "expected viewer1 to be able to remove a group managed by them")
     members_res = @fm.get_members file_id

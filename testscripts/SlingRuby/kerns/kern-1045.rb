@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-
+require 'rubygems'
+require 'bundler'
+Bundler.setup(:default)
 require 'nakamura/test'
 require 'nakamura/file'
 require 'nakamura/users'
@@ -35,6 +37,7 @@ class TC_Kern1045 < Test::Unit::TestCase
     json = JSON.parse(res.body)
     id = json[name]['poolId']
 
+    sleep(5)
 
     # Search the files that I manage .. should be 1
     res = @s.execute_get(@s.url_for("/var/search/pool/me/manager-all.tidy.json"))
