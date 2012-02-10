@@ -33,6 +33,8 @@ import org.sakaiproject.nakamura.util.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.sling.commons.osgi.PropertiesUtil;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
