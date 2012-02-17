@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
+import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.jcr.api.SlingRepository;
 import org.apache.sling.jcr.resource.JcrResourceConstants;
@@ -155,8 +156,9 @@ public class TagMigrator {
       jcrTags = session.getRootNode().addNode("tags");
     }
     for (String tag : allTags) {
-      if (!jcrTags.hasNode(tag)) {
-        String tagPath = tag;
+      String safeTag = Text.escapeIllegalJcrChars(tag);
+      if (!jcrTags.hasNode(safeTag)) {
+        String tagPath = safeTag;
         if ( tagPath.startsWith("/tags")) {
           tagPath = tagPath.substring("/tags".length());
         }
