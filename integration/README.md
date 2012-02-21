@@ -24,3 +24,4 @@ The testing task is designed to allow all the tests to finish running, but if an
 The script we use to wait for startup is not very smart. It just greps the standard log and waits for the message from the World bundle that it has started. The World bundle just happens to be the last bundle to start in our current configuration. If that ever changes, the script will need to be updated.
 
 The wait script also has a timeout, set at around five minutes. If nakamura hasn't started by then, something is wrong and it probably never will. In this case, the script will exit with an error code and maven will fail the build.
+
