@@ -1,4 +1,4 @@
-This is the master branch of Nakamura maintained by the Sakai Foundation. 
+This is the master branch of Nakamura maintained by rSmart. 
 
 This is the Sling-based Sakai OAE kernel that uses OSGi.
 
