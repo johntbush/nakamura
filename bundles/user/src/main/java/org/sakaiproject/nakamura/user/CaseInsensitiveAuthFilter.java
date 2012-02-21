@@ -1,7 +1,6 @@
 package org.sakaiproject.nakamura.user;
 
 import java.io.IOException;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
-@Component
+@Component(metatype = true)
 public class CaseInsensitiveAuthFilter implements Filter {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CaseInsensitiveAuthFilter.class);
@@ -41,10 +40,16 @@ public class CaseInsensitiveAuthFilter implements Filter {
 	@Property(intValue = 8)
 	protected static final String FILTER_PRIORITY_CONF = "filter.priority";
 
+	@Property(boolValue = false)
+	protected static final String EMAIL_AUTH_CONF = "authenticate.with.email";
+	protected Boolean authenticateWithEmail = false;
+
 	@Reference
 	protected ExtHttpService extHttpService;
 
-	// @Reference(target="(service.pid=org.sakaiproject.nakamura.user.SolrUserFinderImpl)")
+	// To use solr add the following config file:
+	// sling/config/org/sakaiproject/nakamura/user/CaseInsensitiveAuthFilter.config
+	// userFinder.target="(service.pid=org.sakaiproject.nakamura.user.SolrUserFinderImpl)"
 	@Reference(target="(service.pid=org.sakaiproject.nakamura.user.SparseUserFinderImpl)")
 	protected UserFinder userFinder;
 
@@ -90,7 +95,7 @@ public class CaseInsensitiveAuthFilter implements Filter {
 				String userId = (String)hrequest.getParameter((FormLoginServlet.USERNAME));
 				if (userId != null) {
 					try {
-						Set<String> results = userFinder.findUsersByName(userId);
+						Set<String> results = getValidUserId(userId);
 						if (results.size() == 1){
 							// Wrap the request so it looks like the user entered the proper case
 							hrequest = new OverriddenRequest(hrequest,
@@ -108,21 +113,27 @@ public class CaseInsensitiveAuthFilter implements Filter {
 				String name = (String)hrequest.getParameter(":name");
 				if (name != null) {
 					hrequest = new OverriddenRequest(hrequest,
-							ImmutableMap.of("nameLower", new String[] {name.toLowerCase()}));
+							ImmutableMap.of("nameLower", new String[] { name.toLowerCase(), }));
 				}
 			}
 		}
 		chain.doFilter(hrequest, response);
 	}
 
-	@SuppressWarnings("unchecked")
+	protected Set<String> getValidUserId(String userId) throws Exception {
+		Set<String> results = userFinder.findUsersByName(userId);
+		// try to find the user by case insensitive email address search
+		if (results.isEmpty() && authenticateWithEmail){
+			results = userFinder.findUsersByEmail(userId);
+		}
+		return results;
+	}
+
 	@Activate
-	protected void activate(ComponentContext componentContext)
+	protected void activate(Map<?,?> props)
 			throws ServletException {
-		Dictionary<String, Object> properties = componentContext
-				.getProperties();
-		int filterPriority = PropertiesUtil.toInteger(
-				properties.get(FILTER_PRIORITY_CONF), 8);
+		authenticateWithEmail = PropertiesUtil.toBoolean(props.get(EMAIL_AUTH_CONF), false);
+		int filterPriority = PropertiesUtil.toInteger(props.get(FILTER_PRIORITY_CONF), 8);
 		extHttpService.registerFilter(this, ".*", null, filterPriority, null);
 	}
 
