@@ -58,6 +58,9 @@ public class ReCaptchaService implements CaptchaService {
   @Property(value = "http://www.google.com/recaptcha/api/verify", description = "The REST endpoint for the reCAPTCHA service.")
   static final String RECAPTCHA_ENDPOINT = "org.sakaiproject.nakamura.captcha.endpoint";
 
+  @Property(boolValue = false, description = "Debug mode turns of reCAPTCHA validation. *DO NOT* enable this in production.")
+  static final String RECAPTCHA_DEBUG = "org.sakaiproject.nakamura.captcha.debugMode";
+
   static final Logger LOGGER = LoggerFactory.getLogger(ReCaptchaService.class);
 
   /**
@@ -67,6 +70,7 @@ public class ReCaptchaService implements CaptchaService {
   private String keyPrivate;
   private String keyPublic;
   private String endpoint;
+  private boolean debugMode = false;
 
   @Activate
   protected void activate(Map<?, ?> properties) {
@@ -74,6 +78,7 @@ public class ReCaptchaService implements CaptchaService {
     keyPrivate = PropertiesUtil.toString(properties.get(KEY_PRIVATE), "");
     keyPublic = PropertiesUtil.toString(properties.get(KEY_PUBLIC), "");
     endpoint = PropertiesUtil.toString(properties.get(RECAPTCHA_ENDPOINT), "");
+    debugMode = PropertiesUtil.toBoolean(properties.get(RECAPTCHA_DEBUG), false);
 
     // Initialize the client on start up.
     client = new HttpClient();
@@ -105,6 +110,10 @@ public class ReCaptchaService implements CaptchaService {
    * @see org.sakaiproject.nakamura.api.captcha.CaptchaService#checkRequest(javax.servlet.http.HttpServletRequest)
    */
   public boolean checkRequest(HttpServletRequest request) {
+
+    if (debugMode)
+      return true;
+
     // We need the following things to verify a request with reCAPTCHA
     // - Our private key (privatekey)
     // - The user his IP address (remoteip)
