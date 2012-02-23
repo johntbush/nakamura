@@ -59,7 +59,11 @@ public class SparseUserFinderImpl implements UserFinder {
 	 */
 	@Override
 	public Set<String> findUsersByName(String name) throws Exception {
-		return findUsersByFields(new String[] { "name", nameLowerField }, name);
+		Set<String> userIds = findUsersByField("name", name);
+		if (userIds.isEmpty()){
+			userIds.addAll(findUsersByField(nameLowerField, name.toLowerCase()));
+		}
+		return userIds;
 	}
 
 	/**
@@ -70,7 +74,11 @@ public class SparseUserFinderImpl implements UserFinder {
 	 */
 	@Override
 	public Set<String> findUsersByEmail(String email) throws Exception {
-		return findUsersByFields(new String[] { "email", emailLowerField }, email);
+		Set<String> userIds = findUsersByField("email", email);
+		if (userIds.isEmpty()){
+			userIds.addAll(findUsersByField(emailLowerField, email.toLowerCase()));
+		}
+		return userIds;
 	}
 
 	/**
@@ -111,17 +119,10 @@ public class SparseUserFinderImpl implements UserFinder {
 		Set<String> userIds = new HashSet<String>();
 		try {
 			Session session = repository.loginAdministrative();
-			if (fieldName.equals("name")){
-				User user = (User)session.getAuthorizableManager().findAuthorizable(fieldValue);
-				if (user != null){
-					userIds.add(user.getId());
-				}
-			} else {
-				Iterator<Authorizable> iterator =
-					session.getAuthorizableManager().findAuthorizable(fieldName, fieldValue, User.class);
-				while (iterator.hasNext()) {
-					userIds.add(iterator.next().getId());
-				}
+			Iterator<Authorizable> iterator =
+				session.getAuthorizableManager().findAuthorizable(fieldName, fieldValue, User.class);
+			while (iterator.hasNext()) {
+				userIds.add(iterator.next().getId());
 			}
 			session.logout();
 		} catch (Exception e) {
@@ -132,11 +133,4 @@ public class SparseUserFinderImpl implements UserFinder {
 		return userIds;
 	}
 
-	protected Set<String> findUsersByFields(String[] fieldNames, String fieldValue) throws Exception {
-		Set<String> userIds = new HashSet<String>();
-		for (String fname: fieldNames){
-			userIds.addAll(findUsersByField(fname, fieldValue));
-		}
-		return userIds;
-	}
 }
