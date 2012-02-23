@@ -1,7 +1,6 @@
 package org.sakaiproject.nakamura.user;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.felix.http.api.ExtHttpService;
 import org.apache.felix.scr.annotations.Activate;
@@ -53,37 +51,6 @@ public class CaseInsensitiveAuthFilter implements Filter {
 	@Reference(target="(service.pid=org.sakaiproject.nakamura.user.SparseUserFinderImpl)")
 	protected UserFinder userFinder;
 
-	protected class OverriddenRequest extends HttpServletRequestWrapper {
-
-		private Map<String,String[]> modifiedMap;
-
-		@SuppressWarnings("unchecked")
-		public OverriddenRequest(HttpServletRequest request, Map<String,String[]> overrides) {
-			super(request);
-			modifiedMap = new HashMap<String, String[]>();
-			modifiedMap.putAll((Map<String, String[]>)super.getParameterMap());
-			modifiedMap.putAll(overrides);
-		}
-
-		@Override
-		public Map<String, String[]> getParameterMap() {
-			/**
-			 * Deep down in the sling authentication stack the request.parameterMap is
-			 * copied and used to get the parameters.
-			 */
-			return modifiedMap;
-		}
-
-		@Override
-		public String getParameter(String parameter) {
-			String[] value = modifiedMap.get(parameter);
-			if (value != null){
-				return value[0];
-			}
-			return null;
-		}
-	}
-
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
@@ -91,7 +58,7 @@ public class CaseInsensitiveAuthFilter implements Filter {
 
 		if ("POST".equals(hrequest.getMethod())) {
 			// Case Insensitive lookup during login
-			if (hrequest.getRequestURI().equals("/system/sling/formlogin")) {
+			if ("/system/sling/formlogin".equals(hrequest.getRequestURI())) {
 				String userId = (String)hrequest.getParameter((FormLoginServlet.USERNAME));
 				if (userId != null) {
 					try {
@@ -109,7 +76,7 @@ public class CaseInsensitiveAuthFilter implements Filter {
 			}
 
 			// Add the lowercased username as the nameLower property
-			if (hrequest.getRequestURI().equals("/system/userManager/user.create.html")) {
+			if ("/system/userManager/user.create.html".equals(hrequest.getRequestURI())) {
 				String name = (String)hrequest.getParameter(":name");
 				if (name != null) {
 					hrequest = new OverriddenRequest(hrequest,
@@ -143,10 +110,8 @@ public class CaseInsensitiveAuthFilter implements Filter {
 	}
 
 	@Override
-	public void destroy() {
-	}
+	public void destroy() { }
 
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-	}
+	public void init(FilterConfig filterConfig) throws ServletException { }
 }

@@ -1,16 +1,14 @@
 package org.sakaiproject.nakamura.user;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.assertFalse;
 
 import java.util.Iterator;
 import java.util.Set;
-
-import junit.framework.Assert;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
