@@ -31,7 +31,8 @@ simple_replace tools/version.bat
 simple_replace webstart/src/main/jnlp/template.vm
 tag_replace app/src/main/bundles/list.xml
 
-otherpoms=`find . -path "./contrib/*pom.xml" -o -path "./samples/*pom.xml" -o -path "./sandbox/*pom.xml" -o -path "./webstart/*pom.xml" -o -path "./modelling/*pom.xml"`
+# otherpoms=`find . -path "./contrib/*pom.xml" -o -path "./samples/*pom.xml" -o -path "./sandbox/*pom.xml" -o -path "./webstart/*pom.xml" -o -path "./modelling/*pom.xml"`
+otherpoms=`find . -not -path ./contrib/postgresql-jdbc/pom.xml -not -path ./contrib/mysql-jdbc/pom.xml -path "./contrib/*pom.xml" -o -path "./samples/*pom.xml" -o -path "./sandbox/*pom.xml" -o -path "./webstart/*pom.xml" -o -path "./modelling/*pom.xml"`
 for file in $otherpoms
   do
     tag_replace $file

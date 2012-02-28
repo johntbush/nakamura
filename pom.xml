@@ -10,16 +10,16 @@
   <url>http://groups.google.com/group/sakai-kernel</url>
   <inceptionYear>2008</inceptionYear>
   <prerequisites>
-    <maven>2.2.0</maven>
+    <maven>2.2.1</maven>
   </prerequisites>
   <scm>
-    <connection>scm:git:git://github.com/sakaiproject/nakamura.git</connection>
-    <developerConnection>scm:git:git@github.com:sakaiproject/nakamura.git</developerConnection>
-    <url>http://github.com/sakaiproject/nakamura/</url>
+    <connection>scm:git:git://github.com/rSmart/nakamura.git</connection>
+    <developerConnection>scm:git:git@github.com:rSmart/nakamura.git</developerConnection>
+    <url>http://github.com/rSmart/nakamura/</url>
   </scm>
   <issueManagement>
     <system>jira</system>
-    <url>http://jira.sakaiproject.org/jira/browse/KERN</url>
+    <url>http://jira.rsmart.com/jira/browse/ACAD</url>
   </issueManagement>
   <profiles>
     <profile>
@@ -348,6 +348,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <slf4j.version>1.6.3</slf4j.version>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+    <wagon.s3.version>1.1.10</wagon.s3.version>
   </properties>
   <build>
     <extensions>
@@ -355,6 +356,11 @@
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-ssh</artifactId>
         <version>2.1</version>
+      </extension>
+      <extension>
+        <groupId>org.kuali.maven.wagons</groupId>
+        <artifactId>maven-s3-wagon</artifactId>
+        <version>${wagon.s3.version}</version>
       </extension>
     </extensions>
     <defaultGoal>install</defaultGoal>
@@ -701,23 +707,23 @@
     <downloadUrl>http://source.sakaiproject.org/maven2/</downloadUrl>
     <snapshotRepository>
        <uniqueVersion>false</uniqueVersion>
-       <id>sakai-maven-snapshots-scp</id>
-       <name>Sakai snapshot Repo</name>
-       <url>scp://source.sakaiproject.org/var/www/html/maven2-snapshots</url>
-       <layout>default</layout>
+       <id>rsmart.snapshot.repo</id>
+       <name>rsmart snapshot repository</name>
+       <url>s3://rsmart-dev/artifacts/maven/snapshot</url>
     </snapshotRepository>
     <repository>
       <uniqueVersion>false</uniqueVersion>
-      <id>sakai-maven2-scp</id>
-      <name>Sakai maven2 repository</name>
-      <url>scp://source.sakaiproject.org/var/www/html/maven2</url>
-      <layout>default</layout>
+      <id>rsmart.release.repo</id>
+      <name>rsmart release repository</name>
+      <url>s3://rsmart-dev/artifacts/maven/release</url>
     </repository>
+    <!--
     <site>
       <id>sakai-site</id>
       <name>Sakai release Site</name>
       <url>scp://source.sakaiproject.org/var/www/html/release/nakamura/${project.version}</url>
     </site>
+     -->
   </distributionManagement>
 <!-- ====================================================================== -->
 <!-- R E P O S I T O R I E S -->
