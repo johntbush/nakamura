@@ -266,7 +266,7 @@
       <build>
         <plugins>
           <!-- We want to sign the artifact, the POM, and all attached artifacts -->
-          <!-- <plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <configuration>
@@ -281,7 +281,7 @@
                 </goals>
               </execution>
             </executions>
-          </plugin> -->
+          </plugin>
           <!-- We want to deploy the artifact to a staging location for perusal -->
           <plugin>
             <inherited>true</inherited>
@@ -550,11 +550,11 @@
           <artifactId>maven-install-plugin</artifactId>
           <version>2.3.1</version>
         </plugin>
-        <!-- <plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>1.4</version>
-        </plugin> -->
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
