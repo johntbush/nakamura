@@ -271,7 +271,6 @@
             <artifactId>maven-gpg-plugin</artifactId>
             <configuration>
               <passphrase>${gpg.passphrase}</passphrase>
-              <skip>true</skip>
             </configuration>
             <executions>
               <execution>
