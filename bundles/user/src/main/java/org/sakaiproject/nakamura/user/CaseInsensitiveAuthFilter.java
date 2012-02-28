@@ -45,10 +45,7 @@ public class CaseInsensitiveAuthFilter implements Filter {
 	@Reference
 	protected ExtHttpService extHttpService;
 
-	// To use solr add the following config file:
-	// sling/config/org/sakaiproject/nakamura/user/CaseInsensitiveAuthFilter.config
-	// userFinder.target="(service.pid=org.sakaiproject.nakamura.user.SolrUserFinderImpl)"
-	@Reference(target="(service.pid=org.sakaiproject.nakamura.user.SparseUserFinderImpl)")
+	@Reference
 	protected UserFinder userFinder;
 
 	@Override
